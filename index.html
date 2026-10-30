@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>7. razred</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 700px; margin: 40px auto; padding: 0 16px; background: #f7f9fc; color: #222; }
+    h1 { color: #1a3d8f; }
+    a.kartica { display: block; padding: 14px 16px; margin: 10px 0; background: #fff; border: 1px solid #d6e0f5; border-radius: 10px; text-decoration: none; color: #1a3d8f; font-weight: 600; }
+    a.kartica:hover { background: #eef3ff; }
+  </style>
+</head>
+<body>
+  <h1>7. razred – digitalni sadržaji</h1>
+  <p>Odaberi materijal:</p>
+  <div id="popis">
+    <a class="kartica" href="Kemija_7_razred_priprema_za_1.test.html">Kemija 7 razred priprema za 1.test</a>
+  </div>
+
+  <script>
+    // Automatski prikazuje sve .html datoteke iz repozitorija
+    fetch("https://api.github.com/repos/primaka1/7.razred/contents/")
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(datoteke => {
+        const html = datoteke.filter(d => d.type === "file" && d.name.endsWith(".html") && d.name !== "index.html");
+        if (!html.length) return;
+        const popis = document.getElementById("popis");
+        popis.innerHTML = "";
+        html.forEach(d => {
+          const a = document.createElement("a");
+          a.className = "kartica";
+          a.href = encodeURI(d.name);
+          a.textContent = d.name.replace(/\.html$/, "").replace(/_/g, " ");
+          popis.appendChild(a);
+        });
+      })
+      .catch(() => {});
+  </script>
+</body>
+</html>
