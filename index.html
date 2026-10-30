@@ -1,41 +1,63 @@
+---
+---
 <!DOCTYPE html>
 <html lang="hr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>7. razred</title>
+  <title>Digitalni sadržaji – 6., 7. i 8. razred</title>
   <style>
-    body { font-family: system-ui, sans-serif; max-width: 700px; margin: 40px auto; padding: 0 16px; background: #f7f9fc; color: #222; }
-    h1 { color: #1a3d8f; }
+    body { font-family: system-ui, sans-serif; max-width: 760px; margin: 40px auto; padding: 0 16px; background: #f7f9fc; color: #222; }
+    h1 { color: #1a3d8f; margin-bottom: 4px; }
+    .podnaslov { color: #555; margin-top: 0; }
+    .izbornik { display: flex; gap: 10px; margin: 24px 0; flex-wrap: wrap; }
+    .izbornik button { flex: 1; min-width: 120px; padding: 16px; font-size: 1.15rem; font-weight: 700; border: 2px solid #1a3d8f; border-radius: 12px; background: #fff; color: #1a3d8f; cursor: pointer; }
+    .izbornik button:hover { background: #eef3ff; }
+    .izbornik button.aktivan { background: #1a3d8f; color: #fff; }
+    .razred { display: none; }
+    .razred.aktivan { display: block; }
     a.kartica { display: block; padding: 14px 16px; margin: 10px 0; background: #fff; border: 1px solid #d6e0f5; border-radius: 10px; text-decoration: none; color: #1a3d8f; font-weight: 600; }
     a.kartica:hover { background: #eef3ff; }
+    .prazno { color: #888; font-style: italic; }
   </style>
 </head>
 <body>
-  <h1>7. razred – digitalni sadržaji</h1>
-  <p>Odaberi materijal:</p>
-  <div id="popis">
-    <a class="kartica" href="Kemija_7_razred_priprema_za_1.test.html">Kemija 7 razred priprema za 1.test</a>
+  <h1>Digitalni sadržaji za učenje</h1>
+  <p class="podnaslov">Odaberi razred:</p>
+
+  <div class="izbornik">
+    <button data-razred="6">6. razred</button>
+    <button data-razred="7">7. razred</button>
+    <button data-razred="8">8. razred</button>
   </div>
 
+  {% assign razredi = "6,7,8" | split: "," %}
+  {% for r in razredi %}
+    {% assign mapa = "/" | append: r | append: "-razred/" %}
+    <div class="razred" id="razred-{{ r }}">
+      <h2>{{ r }}. razred</h2>
+      {% assign ima = false %}
+      {% assign datoteke = site.static_files | sort: "path" %}
+      {% for f in datoteke %}
+        {% if f.extname == ".html" and f.path contains mapa %}
+          {% assign ima = true %}
+          <a class="kartica" href="{{ f.path | relative_url }}">{{ f.basename | replace: "_", " " }}</a>
+        {% endif %}
+      {% endfor %}
+      {% unless ima %}<p class="prazno">Još nema materijala za ovaj razred.</p>{% endunless %}
+    </div>
+  {% endfor %}
+
   <script>
-    // Automatski prikazuje sve .html datoteke iz repozitorija
-    fetch("https://api.github.com/repos/primaka1/7.razred/contents/")
-      .then(r => r.ok ? r.json() : Promise.reject())
-      .then(datoteke => {
-        const html = datoteke.filter(d => d.type === "file" && d.name.endsWith(".html") && d.name !== "index.html");
-        if (!html.length) return;
-        const popis = document.getElementById("popis");
-        popis.innerHTML = "";
-        html.forEach(d => {
-          const a = document.createElement("a");
-          a.className = "kartica";
-          a.href = encodeURI(d.name);
-          a.textContent = d.name.replace(/\.html$/, "").replace(/_/g, " ");
-          popis.appendChild(a);
-        });
-      })
-      .catch(() => {});
+    const gumbi = document.querySelectorAll(".izbornik button");
+    function prikazi(r) {
+      gumbi.forEach(b => b.classList.toggle("aktivan", b.dataset.razred === r));
+      document.querySelectorAll(".razred").forEach(d => d.classList.toggle("aktivan", d.id === "razred-" + r));
+      history.replaceState(null, "", "#" + r);
+    }
+    gumbi.forEach(b => b.addEventListener("click", () => prikazi(b.dataset.razred)));
+    const h = location.hash.slice(1);
+    if (["6", "7", "8"].includes(h)) prikazi(h);
   </script>
 </body>
 </html>
