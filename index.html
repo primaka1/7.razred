@@ -1,63 +1,100 @@
 ---
 ---
+{% assign razredi = "6,7,8" | split: "," %}
+{% assign predmeti = "hrvatski:Hrvatski jezik;matematika:Matematika;engleski:Engleski jezik;povijest:Povijest;geografija:Geografija;biologija:Biologija;kemija:Kemija;fizika:Fizika;tehnicka:Tehnička kultura;informatika:Informatika" | split: ";" %}
+{% assign datoteke = site.static_files | sort: "path" %}
 <!DOCTYPE html>
 <html lang="hr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Digitalni sadržaji – 6., 7. i 8. razred</title>
+  <title>Digitalni sadržaji za učenje</title>
   <style>
-    body { font-family: system-ui, sans-serif; max-width: 760px; margin: 40px auto; padding: 0 16px; background: #f7f9fc; color: #222; }
+    * { box-sizing: border-box; }
+    body { font-family: system-ui, sans-serif; max-width: 820px; margin: 32px auto; padding: 0 16px; background: #f7f9fc; color: #222; }
     h1 { color: #1a3d8f; margin-bottom: 4px; }
+    h2 { color: #1a3d8f; margin: 8px 0 16px; }
     .podnaslov { color: #555; margin-top: 0; }
-    .izbornik { display: flex; gap: 10px; margin: 24px 0; flex-wrap: wrap; }
-    .izbornik button { flex: 1; min-width: 120px; padding: 16px; font-size: 1.15rem; font-weight: 700; border: 2px solid #1a3d8f; border-radius: 12px; background: #fff; color: #1a3d8f; cursor: pointer; }
+    .izbornik { display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+    .izbornik button { flex: 1; min-width: 110px; padding: 16px; font-size: 1.15rem; font-weight: 700; border: 2px solid #1a3d8f; border-radius: 12px; background: #fff; color: #1a3d8f; cursor: pointer; }
     .izbornik button:hover { background: #eef3ff; }
     .izbornik button.aktivan { background: #1a3d8f; color: #fff; }
-    .razred { display: none; }
-    .razred.aktivan { display: block; }
-    a.kartica { display: block; padding: 14px 16px; margin: 10px 0; background: #fff; border: 1px solid #d6e0f5; border-radius: 10px; text-decoration: none; color: #1a3d8f; font-weight: 600; }
+    .pogled { display: none; }
+    .pogled.aktivan { display: block; }
+    .predmeti { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
+    .predmet { text-align: left; padding: 18px 16px; border-radius: 12px; border: 1px solid #d6e0f5; border-left: 6px solid var(--b); background: #fff; cursor: pointer; font-size: 1rem; font-weight: 700; color: #222; }
+    .predmet:hover { background: #f0f4ff; }
+    .predmet small { display: block; font-weight: 400; color: #777; margin-top: 6px; }
+    .predmet.prazan { opacity: .55; }
+    .natrag { background: none; border: none; color: #1a3d8f; font-size: 1rem; cursor: pointer; padding: 6px 0; }
+    .natrag:hover { text-decoration: underline; }
+    a.kartica { display: block; padding: 14px 16px; margin: 10px 0; background: #fff; border: 1px solid #d6e0f5; border-left: 6px solid var(--b); border-radius: 10px; text-decoration: none; color: #1a3d8f; font-weight: 600; }
     a.kartica:hover { background: #eef3ff; }
     .prazno { color: #888; font-style: italic; }
+    [data-p="hrvatski"]{--b:#d64545} [data-p="matematika"]{--b:#2f6fd6} [data-p="engleski"]{--b:#7a4fd6}
+    [data-p="povijest"]{--b:#a0662b} [data-p="geografija"]{--b:#2a9d8f} [data-p="biologija"]{--b:#3fa34d}
+    [data-p="kemija"]{--b:#e07b00} [data-p="fizika"]{--b:#0096c7} [data-p="tehnicka"]{--b:#6c757d} [data-p="informatika"]{--b:#c2185b}
   </style>
 </head>
 <body>
   <h1>Digitalni sadržaji za učenje</h1>
-  <p class="podnaslov">Odaberi razred:</p>
+  <p class="podnaslov">Odaberi razred, pa predmet.</p>
 
   <div class="izbornik">
-    <button data-razred="6">6. razred</button>
-    <button data-razred="7">7. razred</button>
-    <button data-razred="8">8. razred</button>
+    {% for r in razredi %}<button data-razred="{{ r }}">{{ r }}. razred</button>{% endfor %}
   </div>
 
-  {% assign razredi = "6,7,8" | split: "," %}
   {% for r in razredi %}
-    {% assign mapa = "/" | append: r | append: "-razred/" %}
-    <div class="razred" id="razred-{{ r }}">
-      <h2>{{ r }}. razred</h2>
-      {% assign ima = false %}
-      {% assign datoteke = site.static_files | sort: "path" %}
-      {% for f in datoteke %}
-        {% if f.extname == ".html" and f.path contains mapa %}
-          {% assign ima = true %}
-          <a class="kartica" href="{{ f.path | relative_url }}">{{ f.basename | replace: "_", " " }}</a>
-        {% endif %}
+  <div class="pogled" id="v-{{ r }}">
+    <h2>{{ r }}. razred</h2>
+    <div class="predmeti">
+      {% for p in predmeti %}
+        {% assign dio = p | split: ":" %}
+        {% assign mapa = "/" | append: r | append: "-razred/" | append: dio[0] | append: "/" %}
+        {% assign broj = 0 %}
+        {% for f in datoteke %}{% if f.extname == ".html" and f.path contains mapa %}{% assign broj = broj | plus: 1 %}{% endif %}{% endfor %}
+        <button class="predmet{% if broj == 0 %} prazan{% endif %}" data-p="{{ dio[0] }}" data-cilj="{{ r }}/{{ dio[0] }}">
+          {{ dio[1] }}
+          <small>{% if broj == 0 %}nema materijala{% elsif broj == 1 %}1 materijal{% else %}{{ broj }} materijala{% endif %}</small>
+        </button>
       {% endfor %}
-      {% unless ima %}<p class="prazno">Još nema materijala za ovaj razred.</p>{% endunless %}
     </div>
+  </div>
+
+    {% for p in predmeti %}
+      {% assign dio = p | split: ":" %}
+      {% assign mapa = "/" | append: r | append: "-razred/" | append: dio[0] | append: "/" %}
+      <div class="pogled" id="v-{{ r }}-{{ dio[0] }}" data-p="{{ dio[0] }}">
+        <button class="natrag" data-cilj="{{ r }}">← {{ r }}. razred</button>
+        <h2>{{ dio[1] }} – {{ r }}. razred</h2>
+        {% assign ima = false %}
+        {% for f in datoteke %}
+          {% if f.extname == ".html" and f.path contains mapa %}
+            {% assign ima = true %}
+            <a class="kartica" href="{{ f.path | relative_url }}">{{ f.basename | replace: "_", " " }}</a>
+          {% endif %}
+        {% endfor %}
+        {% unless ima %}<p class="prazno">Još nema materijala za ovaj predmet.</p>{% endunless %}
+      </div>
+    {% endfor %}
   {% endfor %}
 
   <script>
-    const gumbi = document.querySelectorAll(".izbornik button");
-    function prikazi(r) {
-      gumbi.forEach(b => b.classList.toggle("aktivan", b.dataset.razred === r));
-      document.querySelectorAll(".razred").forEach(d => d.classList.toggle("aktivan", d.id === "razred-" + r));
-      history.replaceState(null, "", "#" + r);
+    function prikazi(cilj) {
+      const dijelovi = (cilj || "").split("/");
+      const r = dijelovi[0], p = dijelovi[1];
+      const id = p ? "v-" + r + "-" + p : "v-" + r;
+      const el = document.getElementById(id);
+      document.querySelectorAll(".pogled").forEach(d => d.classList.remove("aktivan"));
+      document.querySelectorAll(".izbornik button").forEach(b => b.classList.toggle("aktivan", b.dataset.razred === r));
+      if (!el) return;
+      el.classList.add("aktivan");
+      if (location.hash.slice(1) !== cilj) history.pushState(null, "", "#" + cilj);
     }
-    gumbi.forEach(b => b.addEventListener("click", () => prikazi(b.dataset.razred)));
-    const h = location.hash.slice(1);
-    if (["6", "7", "8"].includes(h)) prikazi(h);
+    document.querySelectorAll(".izbornik button").forEach(b => b.addEventListener("click", () => prikazi(b.dataset.razred)));
+    document.querySelectorAll("[data-cilj]").forEach(b => b.addEventListener("click", () => prikazi(b.dataset.cilj)));
+    window.addEventListener("popstate", () => prikazi(decodeURIComponent(location.hash.slice(1))));
+    prikazi(decodeURIComponent(location.hash.slice(1)));
   </script>
 </body>
 </html>
