@@ -2,6 +2,7 @@
 ---
 {% assign razredi = "6,7,8" | split: "," %}
 {% assign predmeti = "hrvatski:Hrvatski jezik;matematika:Matematika;engleski:Engleski jezik;povijest:Povijest;geografija:Geografija;biologija:Biologija;kemija:Kemija;fizika:Fizika;tehnicka:Tehnička kultura;informatika:Informatika" | split: ";" %}
+{% assign predmeti6 = "hrvatski:Hrvatski jezik;matematika:Matematika;engleski:Engleski jezik;povijest:Povijest;geografija:Geografija;priroda:Priroda;tehnicka:Tehnička kultura;informatika:Informatika" | split: ";" %}
 {% assign datoteke = site.static_files | sort: "path" %}
 <!DOCTYPE html>
 <html lang="hr">
@@ -33,7 +34,7 @@
     .prazno { color: #888; font-style: italic; }
     [data-p="hrvatski"]{--b:#d64545} [data-p="matematika"]{--b:#2f6fd6} [data-p="engleski"]{--b:#7a4fd6}
     [data-p="povijest"]{--b:#a0662b} [data-p="geografija"]{--b:#2a9d8f} [data-p="biologija"]{--b:#3fa34d}
-    [data-p="kemija"]{--b:#e07b00} [data-p="fizika"]{--b:#0096c7} [data-p="tehnicka"]{--b:#6c757d} [data-p="informatika"]{--b:#c2185b}
+    [data-p="kemija"]{--b:#e07b00} [data-p="priroda"]{--b:#6a9a1f} [data-p="fizika"]{--b:#0096c7} [data-p="tehnicka"]{--b:#6c757d} [data-p="informatika"]{--b:#c2185b}
     .zastor { position: fixed; inset: 0; background: rgba(20,30,60,.55); display: none; align-items: center; justify-content: center; padding: 16px; }
     .zastor.otvoren { display: flex; }
     .okvir { background: #fff; border-radius: 14px; padding: 24px; width: 100%; max-width: 360px; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
@@ -57,7 +58,8 @@
   <div class="pogled" id="v-{{ r }}">
     <h2>{{ r }}. razred</h2>
     <div class="predmeti">
-      {% for p in predmeti %}
+      {% if r == "6" %}{% assign lista = predmeti6 %}{% else %}{% assign lista = predmeti %}{% endif %}
+      {% for p in lista %}
         {% assign dio = p | split: ":" %}
         {% assign mapa = "/" | append: r | append: "-razred/" | append: dio[0] | append: "/" %}
         {% assign broj = 0 %}
@@ -70,7 +72,8 @@
     </div>
   </div>
 
-    {% for p in predmeti %}
+    {% if r == "6" %}{% assign lista = predmeti6 %}{% else %}{% assign lista = predmeti %}{% endif %}
+      {% for p in lista %}
       {% assign dio = p | split: ":" %}
       {% assign mapa = "/" | append: r | append: "-razred/" | append: dio[0] | append: "/" %}
       <div class="pogled" id="v-{{ r }}-{{ dio[0] }}" data-p="{{ dio[0] }}">
