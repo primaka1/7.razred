@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Kemija 7 – priprema za test</title>
+<style>
+:root{
+  --bg:#fbf7ee;--card:#fffdf8;--ink:#1d2420;--muted:#5b625e;--line:#e3dccb;
+  --accent:#1f6f8b;--accent-ink:#fff;--ok:#1e7a44;--okbg:#e4f4e9;--bad:#b3261e;--badbg:#fbe9e7;
+  --star:#e0a100;--lock:#b9b2a2;--fs:21px;
+}
+:root[data-theme="dark"]{
+  --bg:#1b1f1d;--card:#252a27;--ink:#f1efe8;--muted:#b8bdb9;--line:#3a413d;
+  --accent:#6cc3e0;--accent-ink:#10181c;--ok:#7fd69f;--okbg:#1f3a2a;--bad:#ff8f86;--badbg:#3d2321;--star:#ffcf4d;--lock:#5c625e;
+}
+*{box-sizing:border-box}
+html{font-size:var(--fs)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Verdana,"Atkinson Hyperlegible",Tahoma,sans-serif;line-height:1.6;letter-spacing:.01em}
+button{font-family:inherit;font-size:1rem;cursor:pointer;border:0;border-radius:16px}
+.app{max-width:640px;margin:0 auto;padding:16px 16px 40px;min-height:100vh;display:flex;flex-direction:column}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px}
+.top h1{font-size:1.05rem;margin:0}
+.tools{display:flex;gap:6px}
+.tool{background:var(--card);color:var(--ink);border:2px solid var(--line);padding:6px 11px;font-size:.8rem;font-weight:700;min-height:44px;min-width:44px}
+.card{background:var(--card);border:2px solid var(--line);border-radius:22px;padding:22px 20px;margin:8px 0}
+.big{font-size:1.15rem;margin:0 0 18px;font-weight:700}
+.text{font-size:1.05rem;margin:0}
+.text b{color:var(--accent)}
+.muted{color:var(--muted);font-size:.85rem}
+.btn{display:block;width:100%;background:var(--accent);color:var(--accent-ink);font-weight:700;padding:16px;margin-top:16px;min-height:60px}
+.btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--line)}
+.row{display:flex;gap:10px}.row .btn{flex:1}
+.btn.listen{background:#5b3fa8;color:#fff;margin:0 0 10px}
+:root[data-theme="dark"] .btn.listen{background:#b9a4ff;color:#1a1430}
+.btn.sel{border-color:var(--accent);color:var(--accent)}
+.btn:disabled{opacity:.35;cursor:default}
+.card.playing{border-color:#5b3fa8}
+.dots{display:flex;gap:7px;justify-content:center;margin:6px 0 4px;flex-wrap:wrap}
+.dot{width:14px;height:14px;border-radius:50%;background:var(--line)}
+.dot.on{background:var(--accent)}.dot.ok{background:var(--ok)}.dot.bad{background:var(--bad)}
+.opt{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--card);color:var(--ink);border:3px solid var(--line);padding:14px 16px;margin:10px 0;min-height:66px;line-height:1.4}
+.opt .k{flex:0 0 36px;height:36px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt.right{border-color:var(--ok);background:var(--okbg)}
+.opt.right .k{background:var(--ok);color:#fff;border-color:var(--ok)}
+.opt.wrong{border-color:var(--bad);background:var(--badbg)}
+.opt.wrong .k{background:var(--bad);color:#fff;border-color:var(--bad)}
+.opt:disabled{cursor:default}
+.fb{border-radius:16px;padding:14px 16px;margin-top:6px;font-size:.95rem}
+.fb.ok{background:var(--okbg);color:var(--ok)}.fb.bad{background:var(--badbg);color:var(--bad)}
+.fb .ex{color:var(--ink);display:block;margin-top:4px}
+.levels{display:grid;grid-template-columns:1fr;gap:10px}
+.lvl{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--card);color:var(--ink);border:2px solid var(--line);padding:14px 16px;min-height:72px}
+.lvl .n{flex:0 0 46px;height:46px;border-radius:14px;background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;font-weight:700}
+.lvl .t{flex:1;font-weight:700;font-size:.92rem;line-height:1.35}
+.lvl .s{font-size:1rem;color:var(--star);letter-spacing:2px;white-space:nowrap}
+.lvl.done{border-color:var(--ok)}
+.stars{font-size:3rem;color:var(--star);text-align:center;letter-spacing:8px;margin:6px 0}
+.center{text-align:center}
+.combo{display:inline-block;background:var(--okbg);color:var(--ok);border-radius:999px;padding:2px 12px;font-size:.8rem;font-weight:700}
+.timer{font-size:3rem;font-weight:700;text-align:center;color:var(--accent);margin:10px 0}
+.speak{background:transparent;border:2px solid var(--line);color:var(--ink);padding:4px 12px;font-size:.8rem;min-height:44px;float:right;margin:-6px -4px 8px 10px}
+.pill{display:inline-block;font-size:.75rem;font-weight:700;color:var(--muted);border:2px solid var(--line);border-radius:999px;padding:1px 10px;margin-bottom:10px}
+.hud{position:sticky;top:0;z-index:4;display:flex;gap:8px;justify-content:space-between;background:var(--bg);padding:6px 0 10px;margin-bottom:4px}
+.chip{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:var(--card);border:2px solid var(--line);border-radius:999px;padding:6px 10px;font-weight:700;font-size:.9rem;min-height:46px;color:var(--ink)}
+.chip .ic{font-size:1.15rem;line-height:1}
+.fire .ic{filter:grayscale(1);opacity:.45;transition:transform .2s}
+.fire.on .ic{filter:none;opacity:1}
+.fire.t2 .ic{transform:scale(1.25)}.fire.t3 .ic{transform:scale(1.5)}
+.fire.on{border-color:#f08a24}
+:root{--coin:#1565c0}:root[data-theme="dark"]{--coin:#7cc4ff}
+.coins{color:var(--coin)}
+.float{position:fixed;left:50%;top:70px;transform:translateX(-50%);font-weight:700;font-size:1.3rem;color:var(--coin);pointer-events:none;z-index:20}
+.toast{position:fixed;left:50%;top:10px;cursor:pointer;transform:translateX(-50%);width:min(92vw,520px);background:var(--card);border:3px solid var(--star);border-radius:20px;padding:14px 16px;display:flex;gap:14px;align-items:center;box-shadow:0 8px 30px rgba(0,0,0,.18);z-index:30}
+.toast .bi{font-size:2.2rem;line-height:1}
+.toast .tt{font-size:.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.toast .tn{font-weight:700}
+.ach{display:grid;grid-template-columns:1fr;gap:10px}
+.ac{display:flex;gap:14px;align-items:center;background:var(--card);border:2px solid var(--line);border-radius:18px;padding:12px 14px}
+.ac .bi{font-size:2rem;flex:0 0 44px;text-align:center}
+.ac.locked .bi{filter:grayscale(1);opacity:.35}
+.ac.locked .an{color:var(--muted)}
+.ac.got{border-color:var(--star)}
+.an{font-weight:700;font-size:.95rem}.ad{font-size:.82rem;color:var(--muted)}
+@media(prefers-reduced-motion:no-preference){.float{animation:up 1s ease-out forwards}@keyframes up{from{opacity:1;top:90px}to{opacity:0;top:30px}}.toast{animation:pop .3s ease-out}@keyframes pop{from{opacity:0;transform:translate(-50%,20px)}to{opacity:1;transform:translate(-50%,0)}}}
+@media(prefers-reduced-motion:no-preference){.card{animation:in .25s ease-out}@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <h1>🧪 Kemija 7</h1>
+    <div class="tools">
+      <button class="tool" onclick="fontSize(-1)" aria-label="Manja slova">A−</button>
+      <button class="tool" onclick="fontSize(1)" aria-label="Veća slova">A+</button>
+      <button class="tool" onclick="toggleTheme()" aria-label="Svijetlo ili tamno">◐</button>
+      <button class="tool" id="homeBtn" onclick="home()" aria-label="Početna">⌂</button>
+    </div>
+  </div>
+  <div class="hud">
+    <div class="chip coins" title="Dijamanti"><span class="ic">💎</span><span id="hCoins">0</span></div>
+    <div class="chip fire" id="hFire" title="Niz točnih odgovora"><span class="ic">🔥</span><span id="hStreak">0</span></div>
+    <button class="chip" onclick="showAch()" title="Postignuća"><span class="ic">🏆</span><span id="hAch">0</span></button>
+  </div>
+  <div id="view"></div>
+</div>
+
+<script>
+/* Svaka razina: kratke kartice za učenje + pitanja. U jednom krugu igra se ROUND pitanja.
+   Pitanje: {q, o:[TOČAN, netočan...], e}  ili  {q, tf:true/false, e} */
+const ROUND=6;
+const LEVELS=[
+{t:"Što je kemija",cards:[
+"<b>Kemija</b> je prirodna znanost. Proučava <b>tvari</b>: njihova svojstva, građu i promjene.",
+"Jedno od prvih kemijskih otkrića bilo je <b>otkriće vatre</b>, prije oko 400 000 godina.",
+"Iz stare <b>alkemije</b> razvila se današnja kemija.",
+"<b>Lavoisier</b> je otac suvremene kemije. Uveo je <b>vagu</b>: vagao je tvari prije i poslije pokusa. Godine 1789. napisao je knjigu „Osnove kemije”.",
+"Najveći problem <b>plastike</b>: traje jako dugo i <b>ne razgrađuje se</b> u prirodi. Rješenje je <b>biorazgradiva plastika</b> i odvajanje otpada.",
+"Hrvati s Nobelovom nagradom za kemiju: <b>Lavoslav Ružička</b> (1939.) i <b>Vladimir Prelog</b> (1975.)."],
+qs:[
+{q:"Kemija proučava…",o:["tvari, njihova svojstva, građu i promjene","samo živa bića","samo sile i kretanje","samo stijene"],e:"Kemija je prirodna znanost o tvarima."},
+{q:"Kemija je društvena znanost.",tf:false,e:"Kemija je prirodna znanost."},
+{q:"Jedno od prvih kemijskih otkrića čovjeka je…",o:["otkriće vatre","izum plastike","izum vage","otkriće struje"],e:"Prije oko 400 000 godina."},
+{q:"Iz čega se razvila današnja kemija?",o:["Iz alkemije","Iz astronomije","Iz geografije","Iz glazbe"],e:"Arapska i europska alkemija."},
+{q:"Tko je otac suvremene kemije?",o:["Lavoisier","Ružička","Prelog","Nobel"],e:"Antoine Laurent de Lavoisier."},
+{q:"Što je Lavoisier uveo u kemijska istraživanja?",o:["Vagu","3D pisač","Plastiku","Termometar na struju"],e:"Vagao je tvari prije i poslije pokusa."},
+{q:"Najveći nedostatak plastike je…",o:["ne razgrađuje se u prirodi","previše je skupa","teško se oblikuje","brzo se raspadne"],e:"Zato nastaje puno plastičnog otpada."},
+{q:"Kakvu plastiku nastoje stvoriti kemičari?",o:["Biorazgradivu","Tvrđu","Šareniju","Magnetičnu"],e:"Biorazgradiva se razgrađuje u prirodi."},
+{q:"Koji su Hrvati dobili Nobelovu nagradu za kemiju?",o:["Ružička i Prelog","Tesla i Bošković","Lavoisier i Nobel","Ružička i Lavoisier"],e:"Ružička 1939., Prelog 1975."},
+{q:"Kemija je povezana s biologijom, fizikom i geologijom.",tf:true,e:"Sve su to prirodne znanosti."}
+]},
+
+{t:"Kemijsko posuđe",cards:[
+"<b>Laboratorij</b> dolazi od latinske riječi „laborare” = <b>raditi</b>.",
+"<b>Retorta</b> je stara posuda, simbol kemije. Služila je za <b>destilaciju</b>.",
+"Obično staklo se <b>ne smije</b> grijati jer može <b>puknuti</b>. Za grijanje služi <b>kemijsko staklo</b>.",
+"<b>Epruveta</b> je valjkasta staklena posuda u kojoj radimo pokuse.",
+"<b>Erlenmeyerova tikvica</b> ima <b>usko grlo</b>: ono sprječava <b>prskanje</b>.",
+"<b>Tamne boce</b> čuvaju kemikalije osjetljive na <b>svjetlost</b>.",
+"<b>Porculansko</b> posuđe služi kad tvar želimo <b>žariti, spaliti ili usitniti</b>. Za usitnjavanje služi <b>tarionik s tučkom</b>.",
+"<b>Metalni pribor</b> (stativ, stezaljke, prsten) drži posuđe. Složeno posuđe i pribor čine <b>aparaturu</b>."],
+qs:[
+{q:"„Laborare” znači…",o:["raditi","učiti","miješati","vagati"],e:"Laboratorij = mjesto rada."},
+{q:"Za što je služila retorta?",o:["Za destilaciju","Za vaganje","Za mjerenje temperature","Za usitnjavanje"],e:"Retorta je simbol kemije."},
+{q:"Zašto se obično staklo ne smije grijati?",o:["Može puknuti","Postane magnetično","Promijeni boju","Postane mekano kao guma"],e:"Ne podnosi nagle promjene temperature."},
+{q:"Valjkasta staklena posuda za pokuse je…",o:["epruveta","menzura","lijevak","tarionik"],e:"Epruveta."},
+{q:"Zašto Erlenmeyerova tikvica ima usko grlo?",o:["Da ne prska","Da se brže grije","Da je lakša","Da stane u hladnjak"],e:"Usko grlo sprječava prskanje."},
+{q:"Zašto su neke boce od tamnoga stakla?",o:["Kemikalija je osjetljiva na svjetlost","Ljepše izgledaju","Jeftinije su","Da se ne razbiju"],e:"Tamno staklo štiti od svjetlosti."},
+{q:"Čime usitnjavamo čvrsti uzorak?",o:["Tarionikom s tučkom","Lijevkom","Pipetom","Satnim staklom"],e:"Tučkom kružno pritišćemo uzorak."},
+{q:"Porculansko posuđe koristimo kad tvar želimo…",o:["žariti, spaliti ili usitniti","precizno izmjeriti","ohladiti","čuvati u mraku"],e:"Porculan podnosi jak plamen."},
+{q:"Što NIJE uređaj za zagrijavanje?",o:["Menzura","Plinski plamenik","Alkoholna grijalica","Grijaća ploča"],e:"Menzura mjeri volumen."},
+{q:"Složeno posuđe i pribor zovemo…",o:["aparatura","laboratorij","tarionik","piktogram"],e:"Kemijska aparatura."},
+{q:"Čemu služi metalni pribor (stativ, stezaljke)?",o:["Drži i pričvršćuje posuđe","Mjeri masu","Mjeri volumen","Grije tekućinu"],e:"Postavljanje i pričvršćivanje."}
+]},
+
+{t:"Mjerenja",cards:[
+"Mjerimo <b>volumen</b> (V), <b>masu</b> (m) i <b>temperaturu</b> (t).",
+"Volumen: <b>menzura</b> (približno), <b>pipeta i odmjerna tikvica</b> (precizno). <b>1 cm³ = 1 mL</b>, a 1 dm³ = 1 L.",
+"<b>Meniskus</b> je zakrivljena površina tekućine u uskoj cijevi. Gledamo <b>u visini meniskusa</b>.",
+"Masa: <b>vaga</b> (tehnička, analitička, digitalna). <b>1 kg = 1000 g</b>, <b>1 g = 1000 mg</b>.",
+"Tvar nikad ne stavljamo <b>izravno</b> na vagu, nego u <b>čistu i suhu posudicu</b>.",
+"Temperatura: <b>termometar</b>, jedinica <b>°C</b> (Celzijev stupanj).",
+"Pogreške mjerenja ne možemo izbjeći, ali ih <b>smanjujemo</b> što više."],
+qs:[
+{q:"Čime PRECIZNO mjerimo volumen?",o:["Pipetom i odmjernom tikvicom","Menzurom i kapaljkom","Čašom","Epruvetom"],e:"Menzura mjeri samo približno."},
+{q:"Koja je posuda ODMJERNA?",o:["Menzura","Lijevak","Epruveta","Boca za otopine"],e:"Menzura mjeri volumen."},
+{q:"1 cm³ je isto što i…",o:["1 mL","1 L","10 mL","100 mL"],e:"1 cm³ = 1 mL."},
+{q:"Koliko grama ima 1 kg?",o:["1000 g","100 g","10 g","10 000 g"],e:"1 kg = 1000 g."},
+{q:"Koliko miligrama ima 1 g?",o:["1000 mg","100 mg","10 mg","1 mg"],e:"1 g = 1000 mg."},
+{q:"Što je meniskus?",o:["Zakrivljena površina tekućine","Dio vage","Vrsta termometra","Dno menzure"],e:"Nastaje u uskim cijevima."},
+{q:"Kako očitavamo volumen u menzuri?",o:["Oči u visini meniskusa","Odozgo kroz otvor","Odozdo ispod dna","Ukoso iz daljine"],e:"Pogled okomito na menzuru."},
+{q:"Kojim slovom označavamo masu?",o:["m","t","V","g"],e:"m = masa, t = temperatura, V = volumen."},
+{q:"Kojim slovom označavamo temperaturu?",o:["t","m","V","T"],e:"t, u °C."},
+{q:"Gdje stavljamo tvar koju važemo?",o:["U čistu i suhu posudicu","Izravno na vagu","U mokru čašu","Na papirić pored vage"],e:"Nikad izravno na zdjelicu vage."},
+{q:"Pogreške mjerenja možemo uvijek potpuno izbjeći.",tf:false,e:"Ne možemo, ali ih smanjujemo."}
+]},
+
+{t:"Znakovi opasnosti",cards:[
+"Znakovi opasnosti su <b>crveni rombovi</b> s crnom slikom.",
+"<b>Lubanja</b> = otrovno. <b>Plamen</b> = zapaljivo. <b>Plamen iznad kruga</b> = oksidirajuće.",
+"<b>Kapljice na ruci i metalu</b> = nagrizajuće. <b>Plinska boca</b> = plinovi pod tlakom.",
+"<b>Uskličnik</b> = nadražujuće. <b>Predmet koji eksplodira</b> = eksplozivno.",
+"<b>Suho drvo i mrtva riba</b> = opasno za okoliš. <b>Čovjek sa zvijezdom na prsima</b> = ozbiljna opasnost za zdravlje."],
+qs:[
+{q:"Lubanja s prekriženim kostima znači…",o:["otrovno","zapaljivo","nagrizajuće","eksplozivno"],e:"Otrovno."},
+{q:"Plamen znači…",o:["zapaljivo","otrovno","nadražujuće","plin pod tlakom"],e:"Zapaljivo."},
+{q:"Plamen iznad kruga znači…",o:["oksidirajuće","zapaljivo","eksplozivno","otrovno"],e:"Oksidirajuće."},
+{q:"Kapljice koje padaju na ruku i metal znače…",o:["nagrizajuće","otrovno","za okoliš","nadražujuće"],e:"Nagrizajuće za metal i kožu."},
+{q:"Plinska boca znači…",o:["plinovi pod tlakom","eksplozivno","zapaljivo","otrovno"],e:"Plinovi pod tlakom."},
+{q:"Uskličnik znači…",o:["nadražujuće","eksplozivno","otrovno","zapaljivo"],e:"Nadražujuće."},
+{q:"Suho drvo i mrtva riba znače…",o:["opasno za okoliš","otrovno","nagrizajuće","oksidirajuće"],e:"Opasno za okoliš, osobito vodu."},
+{q:"Predmet koji eksplodira znači…",o:["eksplozivno","zapaljivo","plin pod tlakom","nadražujuće"],e:"Eksplozivno."},
+{q:"Kojeg su oblika i boje znakovi opasnosti?",o:["Crveni romb","Plavi krug","Zeleni kvadrat","Žuti trokut"],e:"Crveni romb s crnom slikom."}
+]},
+
+{t:"Pravila u laboratoriju",cards:[
+"Nosimo <b>kutu, zaštitne naočale i rukavice</b>. Dugu kosu <b>povežemo</b>.",
+"Kemikalije <b>ne kušamo, ne udišemo i ne diramo prstima</b>.",
+"Miris provjeravamo tako da <b>rukom zamahnemo</b> prema nosu.",
+"Koristimo <b>male količine</b>. Bocu <b>odmah zatvorimo</b> da se čepovi ne zamijene.",
+"Upotrijebljenu žlicu ili kapaljku stavimo na <b>satno stakalce</b> ili u praznu čašu, ne na stol.",
+"Epruvetu za mućkanje začepimo <b>čepom, ne prstom</b>.",
+"Otrovni plinovi: radimo u <b>digestoru</b> ili kraj otvorenoga prozora.",
+"Tekućinu ulijevamo <b>niz stijenku</b> ili <b>niz stakleni štapić</b>."],
+qs:[
+{q:"Koja je zaštitna oprema u laboratoriju?",o:["Kuta, naočale i rukavice","Kapa i šal","Samo obične naočale","Kuhinjska pregača"],e:"I duga kosa se poveže."},
+{q:"Kako provjeravamo miris kemikalije?",o:["Rukom zamahnemo prema nosu","Nos stavimo u bocu","Duboko udahnemo","Kušamo"],e:"Nikad ne udišemo izravno."},
+{q:"Kemikalije smijemo kušati ako je količina mala.",tf:false,e:"Nikad ih ne kušamo."},
+{q:"Gdje stavljamo upotrijebljenu kapaljku?",o:["Na satno stakalce","Na stol","U džep","U bocu s drugom kemikalijom"],e:"Ili u praznu čašu."},
+{q:"Zašto bocu odmah zatvorimo?",o:["Da se čepovi ne zamijene","Da bude lakša","Da se ohladi","Nije važno"],e:"Zamijenjeni čepovi onečiste kemikalije."},
+{q:"Čime začepimo epruvetu kad mućkamo?",o:["Čepom","Prstom","Dlanom","Papirom"],e:"Nikad prstom."},
+{q:"Gdje radimo s otrovnim plinovima?",o:["U digestoru","U zatvorenom ormaru","Ispod stola","Bilo gdje"],e:"Ili kraj otvorenoga prozora."},
+{q:"Kako ulijevamo tekućinu da ne prska?",o:["Niz stijenku ili stakleni štapić","Što brže","Iz visine","Preko pincete"],e:"Polako, niz stijenku."},
+{q:"U pokusima koristimo velike količine kemikalija.",tf:false,e:"Male količine, osim ako upute kažu drugačije."}
+]},
+
+{t:"Grijanje, nezgode i požar",cards:[
+"Posuda koju grijemo mora biti <b>izvana suha</b>. Otvor <b>ne začepljujemo</b> i ne usmjeravamo prema ljudima.",
+"U epruveti tekućine smije biti <b>najviše trećina</b>.",
+"Epruvetu držimo <b>drvenom hvataljkom</b> i grijemo <b>slabim plamenom</b>, uz protresanje.",
+"Čašu grijemo preko <b>keramičke mrežice</b> na <b>tronošcu</b>.",
+"Brojevi: <b>policija 192</b>, <b>vatrogasci 193</b>, <b>hitna 194</b>, <b>112</b>.",
+"Požar gasimo <b>pijeskom, dekom</b> ili <b>aparatom s ugljikovim dioksidom</b>.",
+"<b>Trokut gorenja</b>: kisik, toplina, gorivo. Maknemo li <b>jedno</b>, vatra se gasi."],
+qs:[
+{q:"Koliko tekućine smije biti u epruveti koju grijemo?",o:["Najviše trećina","Do vrha","Pola","Tri četvrtine"],e:"Najviše trećina."},
+{q:"Čime držimo epruvetu dok je grijemo?",o:["Drvenom hvataljkom","Rukom","Pincetom","Štapićem"],e:"Drvena hvataljka."},
+{q:"Posudu koju grijemo smijemo začepiti.",tf:false,e:"Otvor se ne smije začepiti."},
+{q:"Preko čega grijemo čašu na plameniku?",o:["Keramičke mrežice na tronošcu","Izravno u plamenu","Papira","Satnog stakla"],e:"Mrežica ravnomjerno širi toplinu."},
+{q:"Broj hitne pomoći je…",o:["194","192","193","112"],e:"Policija 192, vatrogasci 193, hitna 194."},
+{q:"Broj vatrogasaca je…",o:["193","192","194","911"],e:"193."},
+{q:"Čime gasimo požar u laboratoriju?",o:["Pijeskom, dekom ili aparatom s CO₂","Benzinom","Ventilatorom","Papirom"],e:"Aparat je punjen ugljikovim dioksidom."},
+{q:"Što čini trokut gorenja?",o:["Kisik, toplina i gorivo","Voda, zrak i zemlja","Dim, pepeo i plamen","Pijesak, deka i voda"],e:"Bez jednoga od njih nema vatre."},
+{q:"Da se vatra ugasi, dovoljno je maknuti jedan dio trokuta gorenja.",tf:true,e:"Npr. deka zaustavi dovod kisika."},
+{q:"Kako grijemo epruvetu?",o:["Slabim plamenom, uz protresanje","Jakim plamenom samo na dnu","Začepljenu","Otvorom prema sebi"],e:"Otvor usmjeren prema mjestu gdje nema nikoga."}
+]},
+
+{t:"Pokus i istraživanje",cards:[
+"<b>Pokus</b> je namjerno izazivanje promjene u točno određenim uvjetima, da bismo je pratili i proučili.",
+"Pretpostavka se zove i <b>hipoteza</b>. Provjeravamo je <b>pokusom</b>.",
+"<b>8 koraka:</b> 1. promatramo, 2. prisjetimo se što znamo, 3. postavimo pitanje, 4. hipoteza…",
+"…5. provjerimo pokusom, 6. analiziramo i zaključimo, 7. hipoteza potvrđena ili opovrgnuta, 8. <b>izvijestimo</b>.",
+"<b>Mjehurići</b> znače da nastaje <b>plin</b>. Vrijeme mjerimo <b>zapornim satom</b>.",
+"Rezultate prikazujemo <b>tablicom, grafikonom, slikom ili videom</b>.",
+"<b>Demonstracijski pokus</b> izvodi učitelj kad je pokus opasniji ili složeniji."],
+qs:[
+{q:"Pokus je…",o:["namjerno izazivanje promjene u određenim uvjetima","slučajno miješanje","učenje napamet","gledanje kroz prozor"],e:"Zato da bismo promjenu pratili i proučili."},
+{q:"Drugi naziv za pretpostavku je…",o:["hipoteza","zaključak","rezultat","pokus"],e:"Hipoteza."},
+{q:"Čime provjeravamo hipotezu?",o:["Pokusom","Pogađanjem","Glasanjem","Crtanjem"],e:"Kemija je eksperimentalna znanost."},
+{q:"Koji je PRVI korak istraživanja?",o:["Promatramo","Hipoteza","Izvještaj","Zaključak"],e:"Sve počinje promatranjem."},
+{q:"Što dolazi odmah nakon istraživačkog pitanja?",o:["Hipoteza","Izvještaj","Promatranje","Zaključak"],e:"Pitanje → hipoteza → pokus."},
+{q:"Koji je ZADNJI korak istraživanja?",o:["Izvijestimo o rezultatima","Hipoteza","Promatranje","Pokus"],e:"Na kraju izvještavamo."},
+{q:"Što radimo ako je hipoteza opovrgnuta?",o:["Postavimo novu hipotezu","Odustanemo","Promijenimo rezultate","Kažemo da je ipak točna"],e:"I provjerimo je novim pokusom."},
+{q:"Na što upućuju mjehurići u pokusu?",o:["Nastaje plin","Nastaje led","Vaga je pokvarena","Ništa"],e:"Mjehurići = plin."},
+{q:"Čime mjerimo vrijeme pokusa?",o:["Zapornim satom","Termometrom","Vagom","Menzurom"],e:"Zaporni sat."},
+{q:"Kada pokus izvodi učitelj?",o:["Kad je opasniji ili složeniji","Kad su učenici umorni","Uvijek","Nikad"],e:"To je demonstracijski pokus."}
+]},
+
+{t:"Tvari oko nas",cards:[
+"<b>Tvari</b> izgrađuju sve oko nas. Tvari <b>zauzimaju prostor i imaju masu</b>. I <b>zrak</b> je tvar.",
+"<b>Prirodne</b> tvari: drvo, metal, voda, nafta, vapnenac.",
+"<b>Umjetne</b> tvari: staklo, plastika, guma, sapun, deterdžent.",
+"<b>Organske</b> tvari sadrže <b>ugljik</b>: ulje, bjelančevine, ugljikohidrati, nafta, alkohol, plastika.",
+"<b>Anorganske</b> tvari: voda, zrak, kuhinjska sol, sumpor, željezo."],
+qs:[
+{q:"Što je zajedničko svim tvarima?",o:["Zauzimaju prostor i imaju masu","Sve su čvrste","Sve se vide","Sve vode struju"],e:"I zrak je tvar."},
+{q:"Zrak je tvar.",tf:true,e:"Zauzima prostor i ima masu."},
+{q:"Koja je tvar PRIRODNA?",o:["Nafta","Plastika","Staklo","Deterdžent"],e:"Nafta se nalazi u prirodi."},
+{q:"Koja je tvar UMJETNA?",o:["Plastika","Drvo","Voda","Vapnenac"],e:"Plastiku proizvodi čovjek."},
+{q:"Što sadrže sve organske tvari?",o:["Ugljik","Željezo","Sol","Zlato"],e:"Ugljik."},
+{q:"Koja je tvar ORGANSKA?",o:["Ulje","Kuhinjska sol","Voda","Željezo"],e:"Masti i ulja su organske tvari."},
+{q:"Koja je tvar ANORGANSKA?",o:["Kuhinjska sol","Plastika","Alkohol","Nafta"],e:"Sol, voda, zrak, sumpor, željezo."},
+{q:"Organske tvari mogu nastati samo u živim bićima.",tf:false,e:"Danas se mnoge proizvode umjetno."}
+]},
+
+{t:"Agregacijska stanja",cards:[
+"Tri stanja: <b>čvrsto (s)</b>, <b>tekuće (l)</b>, <b>plinovito (g)</b>.",
+"<b>Čvrsto:</b> čestice gusto složene, samo titraju. <b>Stalan oblik i volumen.</b>",
+"<b>Tekuće:</b> čestice se slobodnije kreću. <b>Stalan volumen, mijenja oblik.</b>",
+"<b>Plinovito:</b> čestice daleko, kreću se na sve strane. <b>Mijenja oblik i volumen.</b>",
+"Stanje ovisi o <b>vrsti tvari, temperaturi i tlaku</b>.",
+"<b>Čestični crtež</b> prikazuje broj, vrstu, veličinu i djelovanje čestica.",
+"Jedini tekući metal: <b>živa</b>. Jedini tekući nemetal: <b>brom</b>."],
+qs:[
+{q:"Oznaka za tekuće stanje je…",o:["l","s","g","t"],e:"s čvrsto, l tekuće, g plinovito."},
+{q:"Oznaka za plinovito stanje je…",o:["g","s","l","p"],e:"g od engl. gas."},
+{q:"Tvar ima stalan volumen, ali mijenja oblik. Koje je to stanje?",o:["Tekuće","Čvrsto","Plinovito"],e:"Tekućina poprima oblik posude."},
+{q:"Tvar mijenja i oblik i volumen. Koje je to stanje?",o:["Plinovito","Čvrsto","Tekuće"],e:"Čestice plina su daleko."},
+{q:"U kojem stanju čestice samo titraju na mjestu?",o:["Čvrstom","Tekućem","Plinovitom"],e:"Čvrsto: stalan oblik i volumen."},
+{q:"O čemu ovisi agregacijsko stanje?",o:["O vrsti tvari, temperaturi i tlaku","O boji","O obliku posude","O danu u tjednu"],e:"Vrsta tvari, temperatura, tlak."},
+{q:"Jedini tekući metal je…",o:["živa","brom","željezo","zlato"],e:"Živa."},
+{q:"Jedini tekući nemetal je…",o:["brom","živa","kisik","sumpor"],e:"Brom."},
+{q:"Kisik je pri sobnoj temperaturi…",o:["plin","tekućina","čvrsta tvar"],e:"Plinovit."},
+{q:"Šećer je pri sobnoj temperaturi…",o:["čvrsta tvar","tekućina","plin"],e:"Kristalna čvrsta tvar."}
+]},
+
+{t:"Prijelazi stanja",cards:[
+"<b>Taljenje:</b> čvrsto → tekuće. Led se tali na <b>0 °C</b>.",
+"<b>Kristalizacija:</b> tekuće → čvrsto.",
+"<b>Isparavanje:</b> tekuće → plin vrenjem. Voda vrije na <b>100 °C</b>.",
+"<b>Hlapljenje:</b> tekuće → plin, ali <b>ispod vrelišta</b> (lokva se suši).",
+"<b>Kondenzacija:</b> plin → tekuće (para na hladnom prozoru).",
+"<b>Sublimacija:</b> čvrsto → plin. <b>Desublimacija:</b> plin → čvrsto (inje).",
+"Dok se led tali, <b>temperatura se ne mijenja</b>."],
+qs:[
+{q:"Čvrsto → tekuće je…",o:["taljenje","kondenzacija","sublimacija","kristalizacija"],e:"Taljenje."},
+{q:"Plin → tekuće je…",o:["kondenzacija","taljenje","hlapljenje","sublimacija"],e:"Kondenzacija."},
+{q:"Čvrsto → plin (izravno) je…",o:["sublimacija","desublimacija","taljenje","isparavanje"],e:"Sublimacija."},
+{q:"Plin → čvrsto (izravno) je…",o:["desublimacija","sublimacija","kristalizacija","kondenzacija"],e:"Desublimacija, npr. inje."},
+{q:"Tekuće → čvrsto je…",o:["kristalizacija","taljenje","hlapljenje","kondenzacija"],e:"Kristalizacija."},
+{q:"Lokva se suši na suncu. To je…",o:["hlapljenje","taljenje","kondenzacija","sublimacija"],e:"Ispod vrelišta = hlapljenje."},
+{q:"Na kojoj se temperaturi tali led?",o:["0 °C","100 °C","20 °C","−50 °C"],e:"0 °C."},
+{q:"Na kojoj temperaturi vrije voda?",o:["100 °C","0 °C","50 °C","200 °C"],e:"100 °C pri atmosferskom tlaku."},
+{q:"Dok se led tali, temperatura stalno raste.",tf:false,e:"Ne mijenja se dok se sav led ne rastali."}
+]},
+
+{t:"Fizikalna svojstva",cards:[
+"<b>Fizikalna svojstva</b> opisuju tvar: oblik, tvrdoća, stanje, topljivost, vodljivost, magnetičnost, kovnost.",
+"Magnet privlači <b>željezo, kobalt i nikal</b>.",
+"<b>Metali</b> dobro vode toplinu i struju. Najbolji: <b>srebro, bakar, zlato</b>.",
+"Ne vode struju (<b>izolatori</b>): plastika, guma, papir, staklo. Vodi struju: <b>grafit</b> i <b>otopina soli</b>.",
+"<b>Sol</b> se otapa u vodi, ali <b>ne u alkoholu</b>. <b>Šećer</b> se otapa u oba.",
+"Otopina <b>soli vodi struju</b>, a otopina šećera ne."],
+qs:[
+{q:"Koje je svojstvo FIZIKALNO?",o:["Tvrdoća","Zapaljivost","Hrđanje","Reaktivnost"],e:"Tvrdoća ne mijenja tvar."},
+{q:"Koje metale privlači magnet?",o:["Željezo, kobalt, nikal","Zlato, srebro, bakar","Aluminij i bakar","Sve metale"],e:"Željezo, kobalt, nikal."},
+{q:"Najbolji vodiči struje su…",o:["srebro, bakar, zlato","guma, papir, staklo","drvo i plastika","sumpor i jod"],e:"Zato su žice od bakra."},
+{q:"Koja tvar je električni IZOLATOR?",o:["Guma","Bakar","Grafit","Otopina soli"],e:"Guma ne vodi struju."},
+{q:"Koji nemetal vodi struju?",o:["Grafit","Sumpor","Kisik","Jod"],e:"Grafit je iznimka."},
+{q:"Sol se otapa u vodi, ali ne u alkoholu.",tf:true,e:"Šećer se otapa i u alkoholu."},
+{q:"Koja otopina vodi struju?",o:["Otopina soli","Otopina šećera","Obje","Nijedna"],e:"Otopina soli."},
+{q:"Sve tvari dobro vode struju.",tf:false,e:"Plastika, guma, papir, staklo ne vode."},
+{q:"Guma, staklo i plastika loše vode toplinu. Oni su toplinski…",o:["izolatori","vodiči","magneti","metali"],e:"Toplinski izolatori."}
+]},
+
+{t:"Gustoća i kemijska svojstva",cards:[
+"Svaku tvar prepoznajemo po <b>gustoći, talištu i vrelištu</b>.",
+"<b>Gustoća</b> ρ = <b>masa : volumen</b> (m / V). Jedinica: g/cm³.",
+"Gustoće: <b>aluminij 2,70</b>, <b>željezo 7,87</b>, <b>zlato 19,30</b> g/cm³.",
+"Tvar koja <b>pluta</b> ima <b>manju</b> gustoću (ulje na vodi).",
+"<b>Kemijsko svojstvo:</b> tvar <b>reagira</b> s drugom tvari. Npr. <b>zapaljivost</b> alkohola.",
+"<b>Reaktivne</b> tvari reagiraju lako. <b>Inertne</b> teško ili nikako (plastika).",
+"Željezo s <b>vodom i zrakom hrđa</b>. Nagrizanje metala na zraku je <b>korozija</b>."],
+qs:[
+{q:"Gustoća se računa…",o:["masa : volumen","volumen : masa","masa · volumen","masa + volumen"],e:"ρ = m / V."},
+{q:"Masa 27 g, volumen 10 cm³. Gustoća je…",o:["2,7 g/cm³ (aluminij)","7,87 g/cm³ (željezo)","19,3 g/cm³ (zlato)","270 g/cm³"],e:"27 : 10 = 2,7."},
+{q:"Tri kocke jednake veličine. Koja je najteža?",o:["Zlatna","Aluminijska","Željezna","Jednake su"],e:"Zlato ima najveću gustoću."},
+{q:"Ulje pluta na vodi pa ima veću gustoću od vode.",tf:false,e:"Što pluta, ima manju gustoću."},
+{q:"Koje je svojstvo KEMIJSKO?",o:["Zapaljivost","Gustoća","Boja","Tvrdoća"],e:"Pri gorenju nastaju nove tvari."},
+{q:"Tvari koje teško ili nikako ne reagiraju su…",o:["inertne","reaktivne","magnetične","vodiči"],e:"Inertne."},
+{q:"Što se događa sa željezom na vlažnom zraku?",o:["Hrđa","Ispari","Otopi se","Ništa"],e:"Hrđanje."},
+{q:"Nagrizanje metala na zraku zove se…",o:["korozija","taljenje","elektroliza","kondenzacija"],e:"Korozija."},
+{q:"Zašto se plastika gomila u prirodi?",o:["Inertna je i sporo se razgrađuje","Brzo hrđa","Magnetična je","Teška je"],e:"Inertnost plastike."}
+]},
+
+{t:"Podjela tvari",cards:[
+"TVARI → <b>čiste tvari</b> i <b>smjese</b>.",
+"Čiste tvari → <b>elementarne tvari</b> i <b>kemijski spojevi</b>. Imaju <b>stalan sastav</b>.",
+"<b>Elementarne tvari</b> se <b>ne mogu</b> kemijski rastaviti. To su metali, nemetali i polumetali.",
+"<b>Kemijski spojevi</b> se <b>mogu</b> rastaviti na jednostavnije tvari.",
+"<b>Elektroliza:</b> strujom voda se rastavi na <b>vodik i kisik</b>. Zato je voda spoj.",
+"<b>Smjesa</b> nastaje miješanjem dviju ili više tvari. <b>Zrak</b> je smjesa dušika i kisika."],
+qs:[
+{q:"Tvari dijelimo na…",o:["čiste tvari i smjese","metale i nemetale","čvrste i tekuće","dobre i loše"],e:"Čiste tvari i smjese."},
+{q:"Čiste tvari dijelimo na…",o:["elementarne tvari i kemijske spojeve","homogene i heterogene","kiseline i lužine","plinove i tekućine"],e:"Elementarne tvari i spojevi."},
+{q:"Elementarne tvari možemo kemijski rastaviti.",tf:false,e:"Ne možemo. Spojeve možemo."},
+{q:"Što je elektroliza vode?",o:["Strujom rastavljamo vodu na vodik i kisik","Kuhanje vode","Smrzavanje vode","Filtriranje vode"],e:"To dokazuje da je voda spoj."},
+{q:"Voda je…",o:["kemijski spoj","elementarna tvar","smjesa","metal"],e:"Spoj vodika i kisika."},
+{q:"Zrak je…",o:["smjesa","elementarna tvar","kemijski spoj","metal"],e:"Smjesa dušika i kisika."},
+{q:"Dušik je…",o:["elementarna tvar","kemijski spoj","smjesa","metal"],e:"Elementarna tvar, nemetal."},
+{q:"Što NIJE elementarna tvar?",o:["Modra galica","Bakar","Kisik","Sumpor"],e:"Modra galica je spoj."},
+{q:"Što NIJE kemijski spoj?",o:["Željezo","Voda","Modra galica","Kuhinjska sol"],e:"Željezo je elementarna tvar."},
+{q:"Koji je spoj ORGANSKI?",o:["Glukoza","Kuhinjska sol","Voda","Modra galica"],e:"Glukoza, etanol, octena kiselina."}
+]},
+
+{t:"Metali i nemetali",cards:[
+"<b>Metali:</b> čvrsti (osim <b>žive</b>), sjajni, visoko talište, <b>vode struju i toplinu</b>, mogu se kovati.",
+"Metali su većinom srebrnosivi. Iznimke: <b>zlato</b> je žuto, <b>bakar</b> crvenkastosmeđ.",
+"Primjeri metala: željezo, zlato, bakar, magnezij, natrij, živa.",
+"<b>Nemetali:</b> čvrsti ili plinoviti (osim <b>broma</b>), niže talište, <b>ne vode</b> struju (osim grafita).",
+"Primjeri nemetala: sumpor, kisik, dušik, klor, helij, ugljik, jod.",
+"<b>Željezo + sumpor</b> pomiješani = <b>smjesa</b>. Željezo je i dalje magnetično.",
+"S užarenom žicom nastaje <b>novi spoj, željezov(II) sulfid</b>. On <b>nije magnetičan</b>."],
+qs:[
+{q:"Koja je tvar METAL?",o:["Magnezij","Sumpor","Jod","Helij"],e:"Magnezij je metal."},
+{q:"Koja je tvar NEMETAL?",o:["Jod","Natrij","Bakar","Zlato"],e:"Jod je nemetal."},
+{q:"Metali dobro vode toplinu i struju.",tf:true,e:"To je glavno svojstvo metala."},
+{q:"Nemetali imaju više talište od metala.",tf:false,e:"Niže."},
+{q:"Koji metal NIJE srebrnosive boje?",o:["Bakar","Željezo","Aluminij","Srebro"],e:"Bakar i zlato su iznimke."},
+{q:"Pomiješamo željezo i sumpor. Što vrijedi?",o:["Željezo je i dalje magnetično","Nastane nova tvar","Sve postane plavo","Sumpor postane magnetičan"],e:"U smjesi tvari zadrže svojstva."},
+{q:"Što nastaje kad smjesu željeza i sumpora dotakne užarena žica?",o:["Željezov(II) sulfid","Hrđa","Modra galica","Sol"],e:"Novi kemijski spoj."},
+{q:"Željezov(II) sulfid je magnetičan.",tf:false,e:"Nije, nova tvar ima nova svojstva."},
+{q:"Koji nemetal je tekuć?",o:["Brom","Živa","Kisik","Ugljik"],e:"Brom."}
+]},
+
+{t:"Bonus: pokusi s nastave",bonus:true,cards:[
+"<b>Modra galica</b> je plava. Kad je grijemo, izlazi <b>voda</b> i ostaje <b>bijeli</b> bezvodni bakrov(II) sulfat.",
+"<b>Soda bikarbona + ocat</b> → mjehurići i pjena. Izlazi plin <b>ugljikov dioksid</b> i napuše balon."],
+qs:[
+{q:"Koje je boje modra galica nakon grijanja?",o:["Bijele","Plave","Zelene","Crvene"],e:"Bezvodni bakrov(II) sulfat je bijel."},
+{q:"Što izlazi iz modre galice kad je grijemo?",o:["Voda","Ugljik","Kisik","Sol"],e:"Voda."},
+{q:"Koji plin nastaje od sode bikarbone i octa?",o:["Ugljikov dioksid","Kisik","Vodik","Dušik"],e:"Ugljikov dioksid."},
+{q:"Što se dogodi s balonom na boci?",o:["Napuše se","Smanji se","Smrzne se","Ništa"],e:"Plin ulazi u balon."}
+]}
+];
+
+/* ---------- stanje (samo dok je stranica otvorena) ---------- */
+const best={}; // razina -> zvjezdice
+let S=null;    // trenutna igra
+const view=document.getElementById('view');
+const KEYS=['A','B','C','D'];
+const hasSpeech='speechSynthesis' in window;
+
+/* ---------- novčići, niz i postignuća ---------- */
+const G={coins:0,streak:0,bestStreak:0,correct:0,rounds:0,perfect:0,played:new Set(),read:new Set(),mix:0,fixed:0,got:new Set()};
+const NUM=LEVELS.filter(l=>!l.bonus).length;
+const totalStars=()=>Object.values(best).reduce((a,b)=>a+b,0);
+const lvlStars=i=>best[i]||0;
+const ACH=[
+{id:'first',i:'🧪',n:'Prvi pokus',d:'Prvi točan odgovor',c:()=>G.correct>=1},
+{id:'s5',i:'🔥',n:'Zapaljeno!',d:'Niz od 5 točnih zaredom',c:()=>G.bestStreak>=5},
+{id:'s10',i:'☄️',n:'Neugasiva vatra',d:'Niz od 10 točnih zaredom',c:()=>G.bestStreak>=10},
+{id:'s20',i:'🌋',n:'Vulkan',d:'Niz od 20 točnih zaredom',c:()=>G.bestStreak>=20},
+{id:'perfect',i:'⭐',n:'Bez greške',d:'3 zvjezdice na jednoj razini',c:()=>G.perfect>=1},
+{id:'perfect5',i:'🌟',n:'Zvjezdani niz',d:'3 zvjezdice na 5 razina',c:()=>Object.values(best).filter(x=>x===3).length>=5},
+{id:'reader',i:'📘',n:'Knjiški moljac',d:'Pročitaj sve kartice jedne razine',c:()=>G.read.size>=1},
+{id:'reader5',i:'📚',n:'Pametna glava',d:'Pročitaj kartice 5 razina',c:()=>G.read.size>=5},
+{id:'r3',i:'🎒',n:'Zagrijavanje',d:'Završi 3 kruga',c:()=>G.rounds>=3},
+{id:'r10',i:'🏃',n:'Upornost se isplati',d:'Završi 10 krugova',c:()=>G.rounds>=10},
+{id:'safety',i:'🥽',n:'Sigurnost prije svega',d:'Barem 2 zvjezdice na razinama 4, 5 i 6',c:()=>[3,4,5].every(i=>lvlStars(i)>=2)},
+{id:'states',i:'🧊',n:'Led, voda, para',d:'Barem 2 zvjezdice na razinama 9 i 10',c:()=>[8,9].every(i=>lvlStars(i)>=2)},
+{id:'fixer',i:'🔧',n:'Majstor popravka',d:'Ispravi 5 krivih odgovora u popravku',c:()=>G.fixed>=5},
+{id:'mix',i:'🌀',n:'Miješalica',d:'Završi miješani krug',c:()=>G.mix>=1},
+{id:'bonus',i:'🎁',n:'Lovac na bonus',d:'Odigraj bonus razinu',c:()=>G.played.has(LEVELS.length-1)},
+{id:'all',i:'🗺️',n:'Sve istraženo',d:'Odigraj svih '+NUM+' razina',c:()=>[...Array(NUM).keys()].every(i=>G.played.has(i))},
+{id:'c100',i:'💎',n:'Prvi dijamanti',d:'Skupi 100 dijamanata',c:()=>G.coins>=100},
+{id:'c500',i:'🧰',n:'Škrinja s blagom',d:'Skupi 500 dijamanata',c:()=>G.coins>=500},
+{id:'c1000',i:'👑',n:'Dijamantna kruna',d:'Skupi 1000 dijamanata',c:()=>G.coins>=1000},
+{id:'stars30',i:'🏆',n:'Majstor kemije',d:'Skupi 30 zvjezdica',c:()=>totalStars()>=30}
+];
+function hud(){
+  document.getElementById('hCoins').textContent=G.coins;
+  document.getElementById('hStreak').textContent=G.streak;
+  document.getElementById('hAch').textContent=G.got.size+'/'+ACH.length;
+  const f=document.getElementById('hFire');
+  f.className='chip fire'+(G.streak>0?' on':'')+(G.streak>=10?' t3':G.streak>=5?' t2':'');
+}
+function addCoins(n,label){
+  G.coins+=n;hud();
+  const el=document.createElement('div');el.className='float';el.textContent='+'+n+' 💎'+(label?' '+label:'');
+  const busy=document.querySelectorAll('.float').length;el.style.marginTop=(busy*34)+'px';
+  document.body.appendChild(el);setTimeout(()=>el.remove(),1100);
+}
+const toastQ=[];let toastOn=false;
+function toast(icon,title,name){toastQ.push([icon,title,name]);if(!toastOn)nextToast()}
+function nextToast(){
+  const t=toastQ.shift();if(!t){toastOn=false;return}toastOn=true;
+  const el=document.createElement('div');el.className='toast';el.setAttribute('role','status');
+  el.innerHTML='<span class="bi">'+t[0]+'</span><div><div class="tt">'+t[1]+'</div><div class="tn">'+esc(t[2])+'</div></div>';
+  let done=false;const close=()=>{if(done)return;done=true;el.remove();nextToast()};
+  el.onclick=close;document.body.appendChild(el);setTimeout(close,2200);
+}
+function checkAch(){
+  ACH.forEach(a=>{if(!G.got.has(a.id)&&a.c()){G.got.add(a.id);G.coins+=25;toast(a.i,'Novo postignuće! +25 💎',a.n)}});
+  hud();
+}
+function showAch(){
+  if(hasSpeech)speechSynthesis.cancel();
+  S=null;
+  let h='<div class="card"><p class="big">🏆 Postignuća</p><p class="text">Otključano <b>'+G.got.size+' od '+ACH.length+'</b>. Svako donosi <b>+25 💎</b>.</p><p class="muted" style="margin-top:8px">Najduži niz: 🔥 '+G.bestStreak+' · Točnih odgovora: '+G.correct+' · Krugova: '+G.rounds+'</p></div><div class="ach">';
+  ACH.forEach(a=>{const g=G.got.has(a.id);h+='<div class="ac '+(g?'got':'locked')+'"><span class="bi">'+a.i+'</span><div><div class="an">'+esc(a.n)+(g?' ✓':'')+'</div><div class="ad">'+esc(a.d)+'</div></div></div>'});
+  h+='</div><button class="btn" onclick="home()">Natrag na razine</button>';
+  view.innerHTML=h;scrollTo(0,0);
+}
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function strip(h){const d=document.createElement('div');d.innerHTML=h;return d.textContent}
+/* ---------- govor ---------- */
+let RATE=.9;
+function voice(){const vs=hasSpeech?speechSynthesis.getVoices():[];return vs.find(v=>/^hr/i.test(v.lang))||vs.find(v=>/^(sr|bs)/i.test(v.lang))||null}
+if(hasSpeech){speechSynthesis.getVoices();speechSynthesis.onvoiceschanged=()=>{}}
+function sayable(t){return t
+  .replace(/°C \(Celzijev stupanj\)/g,'Celzijev stupanj').replace(/\b1\s*g\b/g,'1 gram').replace(/°C/g,' Celzijevih stupnjeva').replace(/g\/cm³/g,' grama po kubnom centimetru')
+  .replace(/(\d)\s*cm³/g,'$1 kubni centimetar').replace(/(\d)\s*dm³/g,'$1 kubni decimetar')
+  .replace(/(\d)\s*mL\b/g,'$1 mililitar').replace(/(\d)\s*mg\b/g,'$1 miligrama').replace(/(\d)\s*kg\b/g,'$1 kilogram').replace(/(\d)\s*g\b/g,'$1 grama').replace(/(\d)\s*L\b/g,'$1 litra')
+  .replace(/\s*=\s*/g,' je ').replace(/\s*→\s*/g,', u ').replace(/ρ/g,'ro').replace(/CO₂/g,'ugljikov dioksid').replace(/\(s\)/g,'').replace(/\(l\)/g,'').replace(/\(g\)/g,'')
+  .replace(/…/g,', ').replace(/„|”/g,'')}
+function utter(t,onend){const u=new SpeechSynthesisUtterance(sayable(t));u.lang='hr-HR';u.rate=RATE;const v=voice();if(v)u.voice=v;if(onend){u.onend=onend}return u}
+function speak(t){if(!hasSpeech)return;speechSynthesis.cancel();speechSynthesis.speak(utter(t))}
+function speakBtn(id){return hasSpeech?'<button class="speak" onclick="speak(document.getElementById(\''+id+'\').textContent)">🔊 Čitaj</button>':''}
+function stars(n,max=3){return '★'.repeat(n)+'☆'.repeat(max-n)}
+
+let fs=21;function fontSize(d){fs=Math.min(30,Math.max(16,fs+d*2));document.documentElement.style.setProperty('--fs',fs+'px')}
+function toggleTheme(){const r=document.documentElement;r.dataset.theme=r.dataset.theme==='dark'?'light':'dark'}
+
+/* ---------- početna ---------- */
+function home(){
+  if(hasSpeech)speechSynthesis.cancel();
+  S=null;
+  const total=Object.values(best).reduce((a,b)=>a+b,0),max=LEVELS.length*3;
+  let h='<div class="card"><p class="big">Bok!</p><p class="text">Odaberi razinu. Svaka ima kratko <b>učenje</b> i samo <b>'+ROUND+' pitanja</b>.</p><p class="text" style="margin-top:10px">💎 Točan odgovor = <b>10 dijamanata</b><br>🔥 Svakih 5 zaredom = <b>bonus</b><br>🏆 Otključaj <b>postignuća</b><br>🎧 Lekciju možeš i <b>slušati</b></p><p class="muted" style="margin-top:10px">Zvjezdice: '+total+' / '+max+'</p></div><div class="levels">';
+  LEVELS.forEach((L,i)=>{const b=best[i]||0;h+='<button class="lvl'+(b===3?' done':'')+'" onclick="startLevel('+i+')"><span class="n">'+(L.bonus?'★':i+1)+'</span><span class="t">'+esc(L.t)+'</span><span class="s" aria-label="'+b+' zvjezdice">'+stars(b)+'</span></button>'});
+  h+='</div><button class="btn ghost" onclick="startMix()">Miješano: 8 pitanja iz svega</button>';
+  view.innerHTML=h;scrollTo(0,0);
+}
+
+/* ---------- učenje (kartice) ---------- */
+function startLevel(i){S={lvl:i,card:0};showCard()}
+function showCard(){
+  const L=LEVELS[S.lvl],c=S.card,n=L.cards.length;
+  let dots='';for(let k=0;k<n;k++)dots+='<span class="dot'+(k<=c?' on':'')+'"></span>';
+  view.innerHTML='<div class="pill">Razina '+(L.bonus?'bonus':S.lvl+1)+' · Učenje '+(c+1)+'/'+n+'</div>'+
+  (c===0&&hasSpeech?'<button class="btn listen" onclick="audioLesson('+S.lvl+')">🎧 Slušaj cijelu lekciju</button>':'')+
+  '<div class="card">'+speakBtn('ct')+'<p class="text" id="ct">'+L.cards[c]+'</p></div><div class="dots">'+dots+'</div>'+
+  '<div class="row">'+(c>0?'<button class="btn ghost" onclick="S.card--;showCard()">← Natrag</button>':'')+
+  '<button class="btn" onclick="'+(c<n-1?'S.card++;showCard()':'readDone()')+'">'+(c<n-1?'Dalje →':'Idemo na pitanja!')+'</button></div>'+
+  (c===0?'<button class="btn ghost" onclick="startQuiz(LEVELS[S.lvl].qs)">Preskoči učenje</button>':'');
+  scrollTo(0,0);
+}
+
+/* ---------- audio lekcija ---------- */
+let AUD=0; // brojač da stari "onend" ne pokrene sljedeću karticu
+function audioLesson(i){S={lvl:i,audio:true,card:0,playing:true,done:false};renderAudio();playCard()}
+function renderAudio(){
+  const L=LEVELS[S.lvl],c=S.card,n=L.cards.length;
+  let dots='';for(let k=0;k<n;k++)dots+='<span class="dot'+(k<c||S.done?' ok':k===c?' on':'')+'"></span>';
+  const v=voice();
+  view.innerHTML='<div class="pill">Razina '+(L.bonus?'bonus':S.lvl+1)+' · 🎧 Audio lekcija · '+(c+1)+'/'+n+'</div>'+
+  '<div class="card'+(S.playing?' playing':'')+'"><p class="muted" style="margin:0 0 8px">'+(S.done?'✓ Lekcija je gotova':S.playing?'🔊 Slušaš…':'⏸ Pauza')+'</p><p class="text">'+L.cards[c]+'</p></div>'+
+  '<div class="dots">'+dots+'</div>'+
+  '<div class="row"><button class="btn ghost" onclick="audioMove(-1)" aria-label="Prethodna" '+(c===0?'disabled':'')+'>⏮</button>'+
+  '<button class="btn" onclick="audioToggle()">'+(S.playing?'⏸ Pauza':S.done?'↺ Ispočetka':'▶ Nastavi')+'</button>'+
+  '<button class="btn ghost" onclick="audioMove(1)" aria-label="Sljedeća" '+(c===n-1?'disabled':'')+'>⏭</button></div>'+
+  '<div class="row"><button class="btn ghost'+(RATE<.9?' sel':'')+'" onclick="setRate(.75)">🐢 Sporije</button><button class="btn ghost'+(RATE>=.9?' sel':'')+'" onclick="setRate(.9)">Normalno</button></div>'+
+  '<button class="btn'+(S.done?'':' ghost')+'" onclick="audioStop();readDone()">Idemo na pitanja! →</button>'+
+  (v?'':'<p class="muted" style="margin-top:14px">Na ovom računalu nema hrvatskoga glasa pa izgovor može biti čudan. Windows: Postavke → Vrijeme i jezik → Govor → Dodaj glasove → Hrvatski (Matej).</p>');
+}
+function playCard(){
+  if(!hasSpeech)return;const my=++AUD;speechSynthesis.cancel();
+  const L=LEVELS[S.lvl];let t=strip(L.cards[S.card]);if(S.card===0)t='Lekcija: '+L.t+'. '+t;
+  const u=utter(t,()=>{if(my!==AUD||!S||!S.audio||!S.playing)return;
+    if(S.card<L.cards.length-1){S.card++;renderAudio();setTimeout(()=>{if(my===AUD&&S&&S.audio&&S.playing)playCard()},800)}
+    else{S.playing=false;S.done=true;renderAudio();if(!G.read.has(S.lvl)){G.read.add(S.lvl);addCoins(5,'za slušanje');checkAch()}}});
+  speechSynthesis.speak(u);
+}
+function audioStop(){AUD++;if(hasSpeech)speechSynthesis.cancel();if(S)S.playing=false}
+function audioToggle(){if(S.playing){audioStop();renderAudio()}else{if(S.done){S.card=0;S.done=false}S.playing=true;renderAudio();playCard()}}
+function audioMove(d){const n=LEVELS[S.lvl].cards.length;S.card=Math.max(0,Math.min(n-1,S.card+d));S.done=false;if(S.playing){renderAudio();playCard()}else renderAudio()}
+function setRate(r){RATE=r;if(S&&S.audio){if(S.playing){renderAudio();playCard()}else renderAudio()}}
+
+function readDone(){
+  if(!G.read.has(S.lvl)){G.read.add(S.lvl);addCoins(5,'za učenje');checkAch()}
+  startQuiz(LEVELS[S.lvl].qs);
+}
+/* ---------- kviz ---------- */
+function startMix(){S={lvl:-1,mix:true};startQuiz(LEVELS.filter(l=>!l.bonus).flatMap(l=>l.qs),8)}
+function startQuiz(pool,count){
+  const list=shuffle(pool).slice(0,count||ROUND);
+  Object.assign(S,{list,i:0,ok:0,combo:0,res:[],retry:[],retrying:false});
+  showQ();
+}
+function showQ(){
+  const q=S.list[S.i];
+  const opts=q.tf!==undefined?[{t:'Točno',ok:q.tf},{t:'Netočno',ok:!q.tf}]:shuffle(q.o.map((t,k)=>({t,ok:k===0})));
+  S.opts=opts;S.answered=false;
+  let dots='';S.list.forEach((_,k)=>{const r=S.res[k];dots+='<span class="dot'+(r===true?' ok':r===false?' bad':k===S.i?' on':'')+'"></span>'});
+  let h='<div class="pill">'+(S.retrying?'Popravak · ':'')+'Pitanje '+(S.i+1)+' od '+S.list.length+(G.streak>=2?' <span class="combo">🔥 '+G.streak+' zaredom!</span>':'')+'</div>';
+  h+='<div class="card">'+speakBtn('qt')+'<p class="big" id="qt">'+esc(q.q)+'</p>';
+  opts.forEach((o,k)=>{h+='<button class="opt" data-k="'+k+'" onclick="answer('+k+')"><span class="k">'+KEYS[k]+'</span><span>'+esc(o.t)+'</span></button>'});
+  h+='<div id="fb"></div></div><div class="dots">'+dots+'</div>';
+  view.innerHTML=h;scrollTo(0,0);
+}
+function answer(k){
+  if(S.answered)return;S.answered=true;
+  const q=S.list[S.i],ok=S.opts[k].ok;
+  document.querySelectorAll('.opt').forEach((b,j)=>{b.disabled=true;if(S.opts[j].ok)b.classList.add('right');else if(j===k)b.classList.add('wrong')});
+  S.res[S.i]=ok;
+  if(ok){
+    S.ok++;G.correct++;G.streak++;G.bestStreak=Math.max(G.bestStreak,G.streak);
+    if(S.retrying)G.fixed++;
+    addCoins(S.retrying?5:10);
+    if(G.streak%5===0)setTimeout(()=>{addCoins(G.streak>=10?50:25,'niz '+G.streak+'!');toast('🔥','Vatreni niz!',G.streak+' točnih zaredom')},350);
+  }else{
+    if(G.streak>=3)toast('💨','Niz se ugasio','Bilo je '+G.streak+' zaredom. Kreni ispočetka!');
+    G.streak=0;if(!S.retrying)S.retry.push(q);
+  }
+  hud();checkAch();
+  const right=S.opts.find(o=>o.ok).t;
+  const praise=['Bravo!','Super!','Točno!','Odlično!','Tako je!'][Math.floor(Math.random()*5)];
+  document.getElementById('fb').innerHTML='<div class="fb '+(ok?'ok':'bad')+'"><b>'+(ok?'✓ '+praise:'✗ Ne baš. Točno je: '+esc(right))+'</b><span class="ex">'+esc(q.e)+'</span></div><button class="btn" id="next" onclick="next()">'+(S.i<S.list.length-1?'Dalje →':'Gotovo')+'</button>';
+  document.getElementById('next').focus({preventScroll:true});
+  document.getElementById('next').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function next(){
+  if(hasSpeech)speechSynthesis.cancel();
+  if(S.i<S.list.length-1){S.i++;showQ();return}
+  if(!S.retrying&&S.retry.length){S.first={ok:S.ok,n:S.list.length};Object.assign(S,{list:shuffle(S.retry),i:0,res:[],retrying:true,combo:0});
+    view.innerHTML='<div class="card center"><p class="big">Još samo malo!</p><p class="text">Ponovimo <b>'+S.list.length+'</b> '+(S.list.length===1?'pitanje koje je bilo krivo':'pitanja koja su bila kriva')+'.</p><button class="btn" onclick="showQ()">Idemo →</button></div>';return}
+  finish();
+}
+function finish(){
+  const f=S.first||{ok:S.ok,n:S.list.length};
+  const pct=f.ok/f.n;const st=pct===1?3:pct>=.66?2:pct>=.34?1:0;
+  if(S.lvl>=0){best[S.lvl]=Math.max(best[S.lvl]||0,st);G.played.add(S.lvl)}
+  G.rounds++;if(S.mix)G.mix++;
+  let bonus=20;if(st===3){bonus+=30;G.perfect++}
+  setTimeout(()=>{addCoins(bonus,st===3?'savršen krug!':'krug završen');checkAch()},300);
+  const msg=st===3?'Savršeno, bez ijedne greške!':st===2?'Jako dobro!':st===1?'Dobar početak. Probaj još jednom!':'Ne odustaj. Pročitaj kartice pa probaj opet!';
+  view.innerHTML='<div class="card center"><p class="big">'+msg+'</p><div class="stars">'+stars(st)+'</div><p class="text">Iz prve točno: <b>'+f.ok+' od '+f.n+'</b></p></div>'+
+  '<div class="card"><p class="big">Pauza za oči</p><p class="text">Pogledaj kroz prozor <b>nešto daleko</b> dok brojač ne dođe do nule.</p><div class="timer" id="tm">20</div></div>'+
+  '<div class="row">'+(S.lvl>=0?'<button class="btn ghost" onclick="startLevel('+S.lvl+')">Ponovi razinu</button>':'')+'<button class="btn" onclick="home()">Na popis razina</button></div>';
+  let t=20;const id=setInterval(()=>{t--;const el=document.getElementById('tm');if(!el){clearInterval(id);return}el.textContent=t>0?t:'Gotovo ✓';if(t<=0)clearInterval(id)},1000);
+  scrollTo(0,0);
+}
+/* tipkovnica: A–D ili 1–4 za odgovor, Enter za dalje */
+document.addEventListener('keydown',e=>{
+  if(!S||!S.list)return;
+  const m={a:0,b:1,c:2,d:3,'1':0,'2':1,'3':2,'4':3}[e.key.toLowerCase()];
+  if(m!==undefined&&!S.answered&&S.opts&&m<S.opts.length){answer(m);e.preventDefault()}
+  else if(e.key==='Enter'&&S.answered){const n=document.getElementById('next');if(n){n.click();e.preventDefault()}}
+});
+hud();home();
+</script>
+</body>
+</html>
