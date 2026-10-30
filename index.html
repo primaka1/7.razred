@@ -34,6 +34,15 @@
     [data-p="hrvatski"]{--b:#d64545} [data-p="matematika"]{--b:#2f6fd6} [data-p="engleski"]{--b:#7a4fd6}
     [data-p="povijest"]{--b:#a0662b} [data-p="geografija"]{--b:#2a9d8f} [data-p="biologija"]{--b:#3fa34d}
     [data-p="kemija"]{--b:#e07b00} [data-p="fizika"]{--b:#0096c7} [data-p="tehnicka"]{--b:#6c757d} [data-p="informatika"]{--b:#c2185b}
+    .zastor { position: fixed; inset: 0; background: rgba(20,30,60,.55); display: none; align-items: center; justify-content: center; padding: 16px; }
+    .zastor.otvoren { display: flex; }
+    .okvir { background: #fff; border-radius: 14px; padding: 24px; width: 100%; max-width: 360px; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
+    .okvir h3 { margin: 0 0 12px; color: #1a3d8f; }
+    .okvir input { width: 100%; padding: 12px; font-size: 1rem; border: 1px solid #b8c6e6; border-radius: 8px; }
+    .okvir .gumbi { display: flex; gap: 8px; margin-top: 14px; }
+    .okvir .gumbi button { flex: 1; padding: 11px; font-size: 1rem; border-radius: 8px; border: 1px solid #1a3d8f; cursor: pointer; background: #fff; color: #1a3d8f; }
+    .okvir .gumbi button[type=submit] { background: #1a3d8f; color: #fff; font-weight: 700; }
+    .greska { color: #c62828; min-height: 1.2em; margin: 8px 0 0; font-size: .95rem; }
   </style>
 </head>
 <body>
@@ -79,12 +88,61 @@
     {% endfor %}
   {% endfor %}
 
+  <div class="zastor" id="zastor">
+    <form class="okvir" id="obrazac">
+      <h3>Upiši lozinku</h3>
+      <input type="password" id="lozinka" autocomplete="current-password" placeholder="Lozinka">
+      <p class="greska" id="greska"></p>
+      <div class="gumbi">
+        <button type="button" id="odustani">Odustani</button>
+        <button type="submit">Uđi</button>
+      </div>
+    </form>
+  </div>
+
   <script>
+    const HASH = "a35c1153853fe94bcd1de00a675eb8fcd9b755508c903a534cdd15fbdda1095a";
+    let otkljucano = false;
+    try { otkljucano = localStorage.getItem("os-pristup") === HASH; } catch (e) {}
+    let cekaCilj = null;
+
+    async function sazetak(tekst) {
+      const s = tekst.trim().normalize("NFC").toLowerCase();
+      const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s));
+      return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
+    }
+
+    const zastor = document.getElementById("zastor");
+    const polje = document.getElementById("lozinka");
+    const greska = document.getElementById("greska");
+
+    function traziLozinku(cilj) {
+      cekaCilj = cilj;
+      greska.textContent = "";
+      polje.value = "";
+      zastor.classList.add("otvoren");
+      polje.focus();
+    }
+    document.getElementById("odustani").addEventListener("click", () => { zastor.classList.remove("otvoren"); cekaCilj = null; });
+    document.getElementById("obrazac").addEventListener("submit", async e => {
+      e.preventDefault();
+      if (await sazetak(polje.value) === HASH) {
+        otkljucano = true;
+        try { localStorage.setItem("os-pristup", HASH); } catch (e) {}
+        zastor.classList.remove("otvoren");
+        prikazi(cekaCilj);
+      } else {
+        greska.textContent = "Pogrešna lozinka. Pokušaj ponovno.";
+        polje.select();
+      }
+    });
+
     function prikazi(cilj) {
       const dijelovi = (cilj || "").split("/");
       const r = dijelovi[0], p = dijelovi[1];
       const id = p ? "v-" + r + "-" + p : "v-" + r;
       const el = document.getElementById(id);
+      if (el && !otkljucano) { traziLozinku(cilj); return; }
       document.querySelectorAll(".pogled").forEach(d => d.classList.remove("aktivan"));
       document.querySelectorAll(".izbornik button").forEach(b => b.classList.toggle("aktivan", b.dataset.razred === r));
       if (!el) return;
