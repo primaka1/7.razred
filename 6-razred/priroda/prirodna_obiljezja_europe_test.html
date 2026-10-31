@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prirodna obilježja Europe - test</title>
+<style>
+:root{--blue:#1769aa;--green:#16803a;--red:#c62828;--bg:#eef4f8;--card:#fff;--text:#17212b;--muted:#5e6b75}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#e7f3ff,#f5fff5);color:var(--text);line-height:1.5}
+.container{max-width:900px;margin:auto;padding:16px}.hero{background:linear-gradient(135deg,#087f5b,#1769aa);color:#fff;border-radius:18px;padding:24px;text-align:center;box-shadow:0 8px 25px #0002}.hero h1{margin:0;font-size:clamp(25px,5vw,40px)}.hero p{margin:8px 0 0}
+.card{background:var(--card);border-radius:16px;padding:20px;margin:18px 0;box-shadow:0 5px 18px #00000016;border:1px solid #dbe5ec}.card h2{margin-top:0;font-size:22px;color:#164d70}.instruction{color:var(--muted);margin-top:-8px}
+.match-row,.tf-row{display:grid;grid-template-columns:minmax(150px,1fr) minmax(180px,1.2fr);gap:14px;align-items:center;margin:12px 0}.term{font-weight:bold}select,input[type=text]{width:100%;min-height:46px;border:2px solid #bdcbd5;border-radius:9px;padding:10px;font-size:17px;background:#fff}select:focus,input:focus{outline:3px solid #8bc5ff;border-color:var(--blue)}
+.tf-row{grid-template-columns:1fr auto}.choices{display:flex;gap:18px}.choice{display:flex;align-items:center;gap:6px;font-weight:bold}.choice input{width:21px;height:21px}
+.group{margin:16px 0;padding:14px;border-radius:12px;background:#f7fafc}.three-inputs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.group label{font-weight:bold;display:block;margin-bottom:9px}
+.actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:22px 0}.btn{border:0;border-radius:10px;padding:13px 20px;font-size:17px;font-weight:bold;cursor:pointer}.primary{background:var(--blue);color:#fff}.secondary{background:#52616b;color:#fff}.btn:hover{filter:brightness(.95)}
+.feedback{margin-top:10px;padding:10px;border-radius:8px;display:none}.correct{border-color:#2e9d50!important;background:#effbf2!important}.wrong{border-color:#d44343!important;background:#fff1f1!important}.feedback.show{display:block}.good{background:#e9f8ee;color:#126329}.bad{background:#ffeded;color:#9a1b1b}.result{display:none;padding:20px;text-align:center;border-radius:16px;margin:20px 0;font-size:19px;font-weight:bold}.result.show{display:block}.result.pass{background:#daf5e3;color:#105d2c}.result.fail{background:#ffe5e5;color:#8d1d1d}.small{font-size:14px;color:var(--muted);font-weight:normal}.answer-key{font-size:14px;margin-top:6px;color:#7c2525}
+@media(max-width:650px){.container{padding:10px}.card{padding:15px}.match-row,.tf-row{grid-template-columns:1fr}.three-inputs{grid-template-columns:1fr}.choices{justify-content:flex-start}.hero{padding:18px}.btn{width:100%}}
+</style>
+</head>
+<body>
+<main class="container">
+<header class="hero"><h1>🌍 Prirodna obilježja Europe</h1><p>Pisana provjera znanja</p></header>
+<form id="quiz" novalidate>
+<section class="card" id="task1"><h2>1. Spoji lijevu i desnu stranu</h2><p class="instruction">Za svaki pojam odaberi odgovarajući odgovor. Svaki točan odgovor vrijedi 1 bod.</p>
+<div class="match-row"><label class="term" for="m1">Staro gorje</label><select id="m1"><option value="">Odaberi odgovor</option><option>Alpe</option><option>Volga</option><option>Ural</option><option>Panonska</option></select></div>
+<div class="match-row"><label class="term" for="m2">Nizina</label><select id="m2"><option value="">Odaberi odgovor</option><option>Alpe</option><option>Volga</option><option>Ural</option><option>Panonska</option></select></div>
+<div class="match-row"><label class="term" for="m3">Mlado gorje</label><select id="m3"><option value="">Odaberi odgovor</option><option>Alpe</option><option>Volga</option><option>Ural</option><option>Panonska</option></select></div>
+<div class="match-row"><label class="term" for="m4">Rijeka</label><select id="m4"><option value="">Odaberi odgovor</option><option>Alpe</option><option>Volga</option><option>Ural</option><option>Panonska</option></select></div><div class="feedback" id="fb1"></div></section>
+<section class="card" id="task2"><h2>2. Točno ili netočno</h2><p class="instruction">Označi T ako je tvrdnja točna, a N ako je netočna. Svaki točan odgovor vrijedi 1 bod.</p>
+<div class="tf-row"><span>a) Europa spada u kontinente Starog svijeta.</span><div class="choices"><label class="choice"><input type="radio" name="q2a" value="T"> T</label><label class="choice"><input type="radio" name="q2a" value="N"> N</label></div></div>
+<div class="tf-row"><span>b) Najdulja rijeka Europe je Rajna.</span><div class="choices"><label class="choice"><input type="radio" name="q2b" value="T"> T</label><label class="choice"><input type="radio" name="q2b" value="N"> N</label></div></div>
+<div class="tf-row"><span>c) Europa površinom spada u veće kontinente.</span><div class="choices"><label class="choice"><input type="radio" name="q2c" value="T"> T</label><label class="choice"><input type="radio" name="q2c" value="N"> N</label></div></div>
+<div class="tf-row"><span>d) U Europi prevladava C tip klime.</span><div class="choices"><label class="choice"><input type="radio" name="q2d" value="T"> T</label><label class="choice"><input type="radio" name="q2d" value="N"> N</label></div></div><div class="feedback" id="fb2"></div></section>
+<section class="card" id="task3"><h2>3. Nabroji po tri primjera</h2><p class="instruction">Upiši tri različita točna primjera. Nije važno kojim redoslijedom. Svaki valjani, različiti odgovor vrijedi 1 bod.</p>
+<div class="group" data-cat="mora"><label>a) Mora koja okružuju Europu</label><div class="three-inputs"><input type="text" aria-label="Prvo more"><input type="text" aria-label="Drugo more"><input type="text" aria-label="Treće more"></div><div class="answer-key"></div></div>
+<div class="group" data-cat="drzave"><label>b) Države Europe</label><div class="three-inputs"><input type="text" aria-label="Prva država"><input type="text" aria-label="Druga država"><input type="text" aria-label="Treća država"></div><div class="answer-key"></div></div>
+<div class="group" data-cat="rijeke"><label>c) Rijeke Europe</label><div class="three-inputs"><input type="text" aria-label="Prva rijeka"><input type="text" aria-label="Druga rijeka"><input type="text" aria-label="Treća rijeka"></div><div class="answer-key"></div></div>
+<div class="group" data-cat="otoci"><label>d) Otoci Europe</label><div class="three-inputs"><input type="text" aria-label="Prvi otok"><input type="text" aria-label="Drugi otok"><input type="text" aria-label="Treći otok"></div><div class="answer-key"></div></div><div class="feedback" id="fb3"></div></section>
+<div class="actions"><button class="btn primary" type="submit">Provjeri i završi test</button><button class="btn secondary" type="button" id="resetBtn">Pokušaj ponovno</button></div>
+<div class="result" id="result" aria-live="polite"></div></form></main>
+<script>
+const matching={m1:'Ural',m2:'Panonska',m3:'Alpe',m4:'Volga'};
+const trueFalse={q2a:'T',q2b:'N',q2c:'N',q2d:'T'};
+const valid={
+ mora:['atlantski ocean','atlantsko more','sjeverno more','baltičko more','baltičko','sredozemno more','sredozemno','crno more','crno','jadransko more','jadransko','jonsko more','jonsko','egejsko more','egejsko','norveško more','norveško','barentsovo more','barentsovo','bijelo more','bijelo','azovsko more','azovsko','tirensko more','tirensko','ligursko more','ligursko'],
+ drzave:['hrvatska','slovenija','srbija','bosna i hercegovina','bih','crna gora','sjeverna makedonija','albanija','italija','francuska','njemačka','austrija','mađarska','švicarska','španjolska','portugal','belgija','nizozemska','luksemburg','danska','norveška','švedska','finska','island','irska','ujedinjeno kraljevstvo','velika britanija','poljska','češka','slovačka','rumunjska','bugarska','grčka','ukrajina','moldavija','bjelorusija','litva','latvija','estonija','rusija','malta','cipar','lihtenštajn','monako','andora','san marino','vatikan','kosovo'],
+ rijeke:['volga','dunav','rajna','sava','drava','kupa','mura','odera','visla','dnjestar','dnjepar','don','elbe','laba','temza','senna','loara','rona','po','tibar','tagus','tejo','duero','ebro','ural'],
+ otoci:['velika britanija','irska','island','sicilija','sardinija','korzika','kreta','cipar','malta','krk','cres','brač','hvar','pag','rab','vis','korčula','lastovo','man','gotland','ibiza','mallorca','majorka','menorca','rodos','lešbos','lezbos']
+};
+const examples={mora:'Primjeri: Sredozemno more, Baltičko more, Sjeverno more.',drzave:'Primjeri: Hrvatska, Italija, Njemačka.',rijeke:'Primjeri: Volga, Dunav, Rajna.',otoci:'Primjeri: Velika Britanija, Island, Sicilija.'};
+function norm(s){return s.toLocaleLowerCase('hr').trim().replace(/[.,;:!?]/g,'').replace(/\s+/g,' ')}
+function mark(el,ok){el.classList.remove('correct','wrong');el.classList.add(ok?'correct':'wrong')}
+function showFb(id,text,ok){const e=document.getElementById(id);e.textContent=text;e.className='feedback show '+(ok?'good':'bad')}
+document.getElementById('quiz').addEventListener('submit',e=>{
+ e.preventDefault();let score=0;const total=20;let s1=0;
+ Object.entries(matching).forEach(([id,ans])=>{const el=document.getElementById(id),ok=el.value===ans;mark(el,ok);if(ok){score++;s1++}});
+ showFb('fb1',`Točno: ${s1}/4. Ispravni parovi: Staro gorje – Ural; Nizina – Panonska; Mlado gorje – Alpe; Rijeka – Volga.`,s1===4);
+ let s2=0;Object.entries(trueFalse).forEach(([name,ans])=>{const chosen=document.querySelector(`input[name="${name}"]:checked`);const row=document.querySelector(`input[name="${name}"]`).closest('.tf-row');const ok=chosen&&chosen.value===ans;mark(row,ok);if(ok){score++;s2++}});
+ showFb('fb2',`Točno: ${s2}/4. Rješenja: a) T, b) N, c) N, d) T.`,s2===4);
+ let s3=0;document.querySelectorAll('.group').forEach(group=>{const cat=group.dataset.cat,seen=new Set();let groupScore=0;group.querySelectorAll('input').forEach(inp=>{const value=norm(inp.value);const ok=value!==''&&valid[cat].includes(value)&&!seen.has(value);if(ok){seen.add(value);score++;s3++;groupScore++}mark(inp,ok)});group.querySelector('.answer-key').textContent=`${groupScore}/3. ${examples[cat]}`});
+ showFb('fb3',`Točnih primjera: ${s3}/12. Isti odgovor unutar jedne skupine boduje se samo jednom.`,s3===12);
+ const pct=Math.round(score/total*100);let grade=pct>=90?5:pct>=75?4:pct>=60?3:pct>=50?2:1;const res=document.getElementById('result');res.className='result show '+(grade>=2?'pass':'fail');res.innerHTML=`Rezultat: ${score}/${total} bodova (${pct}%)<br>Ocjena: ${grade}<div class="small">Pragovi: 50% dovoljan, 60% dobar, 75% vrlo dobar, 90% odličan.</div>`;res.scrollIntoView({behavior:'smooth',block:'center'});
+});
+document.getElementById('resetBtn').addEventListener('click',()=>{document.getElementById('quiz').reset();document.querySelectorAll('.correct,.wrong').forEach(e=>e.classList.remove('correct','wrong'));document.querySelectorAll('.feedback').forEach(e=>{e.className='feedback';e.textContent=''});document.querySelectorAll('.answer-key').forEach(e=>e.textContent='');const r=document.getElementById('result');r.className='result';r.textContent='';scrollTo({top:0,behavior:'smooth'})});
+</script>
+</body>
+</html>
