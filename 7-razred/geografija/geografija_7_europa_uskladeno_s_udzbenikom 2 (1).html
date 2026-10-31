@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#155e75">
+<title>Geografija 7. razred – Prirodno-geografska obilježja Europe</title>
+<style>
+:root{--bg:#eef7fa;--card:#fff;--primary:#0e7490;--primary2:#155e75;--accent:#f59e0b;--text:#16313b;--muted:#526b74;--ok:#15803d;--bad:#b91c1c;--line:#cfe3e8;--shadow:0 10px 28px rgba(15,74,87,.12)}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#e6f6fb,#f8fbf3);color:var(--text);line-height:1.5}
+header{background:linear-gradient(135deg,var(--primary2),var(--primary));color:white;padding:28px 16px;text-align:center}
+header h1{margin:0 0 6px;font-size:clamp(1.55rem,5vw,2.4rem)}
+header p{margin:0;opacity:.94}
+main{width:min(960px,calc(100% - 24px));margin:20px auto 50px}
+nav{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:18px}
+button{font:inherit;font-weight:700;border:0;border-radius:10px;padding:11px 16px;cursor:pointer;background:var(--primary);color:#fff;touch-action:manipulation}
+button:hover{filter:brightness(.94)} button:focus-visible,input:focus-visible{outline:3px solid #fbbf24;outline-offset:2px}
+button.secondary{background:#475569} button.light{background:#e0f2f6;color:#164e63;border:1px solid #9bcbd5} button.warn{background:#b45309}
+.panel{display:none}.panel.active{display:block}
+.info,.question-card,.flash-wrap,.result{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+.info{padding:16px;margin-bottom:16px}.info h2{margin:0 0 6px}.progress-row{display:flex;justify-content:space-between;gap:12px;font-weight:700;margin-bottom:6px}.bar{height:12px;background:#dcebee;border-radius:99px;overflow:hidden}.bar>div{height:100%;background:linear-gradient(90deg,#14b8a6,#0e7490);width:0;transition:width .25s}
+.question-card{padding:18px;margin:14px 0}.question-card h3{margin:0 0 14px;font-size:1.08rem}.option{display:flex;align-items:flex-start;gap:10px;border:2px solid #d8e7ea;border-radius:12px;padding:11px;margin:9px 0;cursor:pointer;background:#fbfefe}.option:hover{border-color:#7fbac6}.option input{margin-top:4px;transform:scale(1.2)}.option.correct{border-color:#22c55e;background:#ecfdf3}.option.wrong{border-color:#ef4444;background:#fff1f2}.explain{display:none;margin-top:10px;padding:10px;border-left:4px solid var(--primary);background:#eef9fb;border-radius:5px}.explain.show{display:block}
+.actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:20px 0}.result{padding:22px;text-align:center;margin-top:18px}.result h2{font-size:2rem;margin:0 0 8px}.grade{font-size:4rem;font-weight:800;color:var(--primary2);line-height:1}.hidden{display:none!important}
+.flash-wrap{padding:20px;text-align:center}.flash-card{min-height:260px;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:23px;border-radius:16px;background:linear-gradient(145deg,#fff,#edf9fb);border:3px solid #9dcfd8;cursor:pointer;user-select:none}.flash-card .tag{text-transform:uppercase;letter-spacing:1px;color:var(--primary);font-weight:800;font-size:.8rem}.flash-card .flash-text{font-size:clamp(1.15rem,4vw,1.6rem);font-weight:700;margin:20px 0}.flash-card .hint{color:var(--muted);font-size:.9rem}.flash-card.answer-side{background:linear-gradient(145deg,#f0fdf4,#fff);border-color:#86c99b}.flash-controls{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:16px}.counter{font-weight:700;margin-bottom:12px}.small{color:var(--muted);font-size:.92rem}.grade-scale{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;margin-top:12px}.grade-scale span{background:#edf5f7;border-radius:8px;padding:5px 8px;font-size:.82rem}
+@media(max-width:560px){header{padding:22px 12px}main{width:min(100% - 16px,960px);margin-top:12px}.question-card{padding:14px}.option{padding:10px}.actions button,.flash-controls button{flex:1 1 135px}.flash-card{min-height:300px}.progress-row{font-size:.9rem}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+<h1>🌍 Prirodno-geografska obilježja Europe</h1>
+<p>Geografija, 7. razred • učenje i provjera znanja</p>
+</header>
+<main>
+<nav aria-label="Odabir načina rada">
+<button id="testTab" type="button">📝 Pokreni test</button>
+<button id="flashTab" class="light" type="button">🧠 Kartice za učenje</button>
+</nav>
+<section id="testPanel" class="panel active">
+<div class="info">
+<h2>Test s višestrukim izborom</h2>
+<p class="small">Pitanja i ponuđeni odgovori miješaju se pri svakom pokretanju. Svi točni odgovori usklađeni su s dostavljenim udžbenikom. Odaberi jedan odgovor na svako pitanje.</p>
+<div class="progress-row"><span id="answeredText">Odgovoreno: 0 / 32</span><span id="percentText">0%</span></div>
+<div class="bar" aria-label="Napredak"><div id="progressBar"></div></div>
+</div>
+<div id="quiz"></div>
+<div class="actions">
+<button id="finishBtn" type="button">Provjeri test i dodijeli ocjenu</button>
+<button id="newTestBtn" class="secondary" type="button">Novi nasumični test</button>
+</div>
+<div id="result" class="result hidden" aria-live="polite"></div>
+</section>
+<section id="flashPanel" class="panel">
+<div class="flash-wrap">
+<h2>Kartice za ponavljanje</h2>
+<p class="small">Pokušaj odgovoriti, zatim dodirni karticu kako bi vidio rješenje.</p>
+<div id="flashCounter" class="counter"></div>
+<div id="flashCard" class="flash-card" tabindex="0" role="button" aria-label="Okreni karticu">
+<div id="flashTag" class="tag"></div><div id="flashText" class="flash-text"></div><div class="hint">Dodirni za okretanje</div>
+</div>
+<div class="flash-controls">
+<button id="prevBtn" class="secondary" type="button">← Prethodna</button>
+<button id="flipBtn" type="button">Okreni karticu</button>
+<button id="nextBtn" class="secondary" type="button">Sljedeća →</button>
+<button id="shuffleCardsBtn" class="warn" type="button">🔀 Izmiješaj</button>
+</div>
+</div>
+</section>
+</main>
+<script>
+const data=[
+{q:"Na kojoj se polutki Europa nalazi u odnosu na ekvator?",a:"U potpunosti se nalazi na sjevernoj polutki.",o:["U potpunosti se nalazi na južnoj polutki.","Podjednako se nalazi na sjevernoj i južnoj polutki.","Većim dijelom nalazi se na južnoj polutki."]},
+{q:"Gdje se najvećim dijelom nalazi Europa u odnosu na početni meridijan?",a:"Najvećim dijelom istočno, a tek manjim dijelom zapadno od početnog meridijana.",o:["Najvećim dijelom zapadno od početnog meridijana.","U potpunosti istočno od početnog meridijana.","U potpunosti zapadno od početnog meridijana."]},
+{q:"Od koje riječi, prema jednoj teoriji, potječe ime Europa?",a:"Od asirske riječi ereb.",o:["Od grčke riječi euros.","Od latinske riječi terra.","Od asirske riječi asu."]},
+{q:"Što znači asirska riječ ereb?",a:"Zalaz Sunca, zapad.",o:["Izlaz Sunca, istok.","Sjeverno kopno.","Veliko more."]},
+{q:"Što čini dogovorenu prirodnu granicu između Europe i Azije?",a:"Gorje Ural, rijeka Ural, sjeverozapadna obala Kaspijskog jezera, planina Kavkaz, Crno more, Bospor, Dardaneli i Mramorno more između njih.",o:["Alpe, Rajna, Sjeverno more i Engleski kanal.","Pireneji, Ebro, Sredozemno more i Gibraltarska vrata.","Karpati, Dunav, Jadransko more i Otrantska vrata."]},
+{q:"Kakav geografski položaj ima Europa?",a:"Povoljan geografski položaj.",o:["Nepovoljan geografski položaj.","Potpuno izoliran geografski položaj.","Prometno nevažan geografski položaj."]},
+{q:"Između kojih se kontinenata nalazi Europa?",a:"Između Azije i Afrike.",o:["Između Afrike i Australije.","Između Azije i Sjeverne Amerike.","Između Afrike i Južne Amerike."]},
+{q:"Koji oceani i more okružuju Europu prema udžbeniku?",a:"Arktički i Atlantski ocean te Sredozemno more.",o:["Tihi i Indijski ocean te Crveno more.","Atlantski i Indijski ocean te Crno more.","Arktički i Tihi ocean te Baltičko more."]},
+{q:"Kako je Europa prometno povezana s ostalim kontinentima?",a:"Oceanima i morima te morskim prolazima i kanalima.",o:["Samo cestama i željeznicama.","Isključivo zračnim prometom.","Samo rijekama i jezerima."]},
+{q:"Koje su tri vrste stijena prema postanku?",a:"Vulkanske (magmatske ili eruptivne), taložne (sedimentne) i preobražene (metamorfne).",o:["Granitne, vapnenačke i pješčane.","Tvrde, meke i rastresite.","Planinske, nizinske i morske."]},
+{q:"Kako se zove najveća europska nizina?",a:"Istočnoeuropska nizina.",o:["Panonska nizina.","Padska nizina.","Vlaška nizina."]},
+{q:"Koja se planina u udžbeniku navodi na prirodnoj granici Europe i Azije?",a:"Kavkaz.",o:["Alpe.","Karpati.","Pireneji."]},
+{q:"Kako se zove najviši vrh Europe?",a:"Elbrus.",o:["Mont Blanc.","Gerlach.","Aneto."]},
+{q:"Kako se zove najdulja europska rijeka?",a:"Volga.",o:["Dunav.","Rajna.","Dnjepar."]},
+{q:"Kako se zove najveći europski poluotok?",a:"Skandinavski poluotok.",o:["Pirenejski poluotok.","Apeninski poluotok.","Balkanski poluotok."]},
+{q:"Kako se zove najveći europski otok?",a:"Velika Britanija.",o:["Island.","Irska.","Sicilija."]},
+{q:"Koja se dva otoka u udžbeniku navode među većim europskim otocima, odmah nakon Velike Britanije?",a:"Island i Irska.",o:["Sicilija i Kreta.","Korzika i Sardinija.","Malta i Cipar."]},
+{q:"Kako se zove kanal završen 1992. godine?",a:"Kanal Majna–Dunav.",o:["Kilski kanal.","Kanal Volga–Don.","Sueski kanal."]},
+{q:"Koja mora povezuje kanalski sustav Rajna–Majna–Dunav?",a:"Sjeverno more s Crnim morem.",o:["Baltičko more s Crnim morem.","Jadransko more s Egejskim morem.","Sredozemno more s Crvenim morem."]},
+{q:"Koji se kanal u udžbeniku ubraja u najprometnije umjetne kanale na svijetu?",a:"Kilski kanal.",o:["Kanal Majna–Dunav.","Kanal Volga–Don.","Korintski kanal."]},
+{q:"Koja je najsjevernija europska luka navedena u udžbeniku?",a:"Murmansk.",o:["Helsinki.","Odesa.","Riga."]},
+{q:"Koje se more najvećim dijelom ne zaleđuje zbog utjecaja tople Golfske struje?",a:"Barentsovo more.",o:["Bijelo more.","Baltičko more.","Crno more."]},
+{q:"Kojem slijevu pripadaju Don i Dunav?",a:"Crnomorskom slijevu.",o:["Arktičkom slijevu.","Atlantskom slijevu.","Slijevu Kaspijskog jezera."]},
+{q:"Kojem slijevu pripada rijeka Po?",a:"Sredozemnom slijevu.",o:["Crnomorskom slijevu.","Arktičkom slijevu.","Slijevu Kaspijskog jezera."]},
+{q:"Koji vjetrovi prenose topao i vlažan morski zrak nad europski kontinent?",a:"Zapadni vjetrovi.",o:["Pasati.","Monsuni.","Polarni istočni vjetrovi."]},
+{q:"Koja topla morska struja ima velik utjecaj na klimu Europe?",a:"Golfska struja.",o:["Labradorska struja.","Kanarska struja.","Benguelska struja."]},
+{q:"Koji tip klime nije prikazan među tipovima klima u Europi u udžbeniku?",a:"Tropska klima.",o:["Stepska klima.","Sredozemna klima.","Klima tundre."]},
+{q:"Koje klime uglavnom obilježavaju prostor Europe?",a:"Umjereno tople vlažne i snježno-šumske klime.",o:["Tropske i monsunske klime.","Pustinjske i ekvatorske klime.","Samo snježne klime."]},
+{q:"Koja je Europa po površini u usporedbi s ostalim kontinentima?",a:"Gotovo najmanji kontinent; od Europe je manja samo Australija.",o:["Najmanji kontinent.","Treći najveći kontinent.","Najveći kontinent."]},
+{q:"Što je Euroazija?",a:"Najveća kopnena cjelina na Zemlji koju čine Europa i Azija.",o:["Zajedničko kopno Europe i Afrike.","Skup svih europskih otoka.","Savez europskih država."]},
+{q:"Kako se zove najveće jezero Europe?",a:"Ladoško jezero (Ladoga).",o:["Oneško jezero (Onega).","Ženevsko jezero.","Bodensko jezero."]},
+{q:"Koje je drugo najveće prirodno jezero Europe?",a:"Oneško jezero (Onega).",o:["Balaton.","Ohridsko jezero.","Bodensko jezero."]}
+];
+const shuffle=a=>{const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b};
+let quizData=[],finished=false;
+const quiz=document.getElementById('quiz'),result=document.getElementById('result');
+function buildQuiz(){finished=false;result.classList.add('hidden');result.innerHTML='';quizData=shuffle(data).map(item=>({...item,choices:shuffle([item.a,...item.o])}));quiz.innerHTML=quizData.map((item,i)=>`<article class="question-card" data-i="${i}"><h3>${i+1}. ${item.q}</h3>${item.choices.map((c,j)=>`<label class="option"><input type="radio" name="q${i}" value="${j}"><span>${c}</span></label>`).join('')}<div class="explain"><strong>Točan odgovor:</strong> ${item.a}</div></article>`).join('');quiz.querySelectorAll('input').forEach(x=>x.addEventListener('change',updateProgress));updateProgress();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){const n=quizData.filter((_,i)=>document.querySelector(`input[name=q${i}]:checked`)).length;document.getElementById('answeredText').textContent=`Odgovoreno: ${n} / ${quizData.length}`;const p=Math.round(n/quizData.length*100);document.getElementById('percentText').textContent=p+'%';document.getElementById('progressBar').style.width=p+'%'}
+function finishQuiz(){if(finished)return;const unanswered=quizData.filter((_,i)=>!document.querySelector(`input[name=q${i}]:checked`)).length;if(unanswered && !confirm(`Nisi odgovorio/la na ${unanswered} ${unanswered===1?'pitanje':'pitanja'}. Želiš li ipak završiti test?`))return;let score=0;quizData.forEach((item,i)=>{const card=document.querySelector(`[data-i="${i}"]`),chosen=card.querySelector('input:checked');card.querySelectorAll('.option').forEach(label=>{const text=label.querySelector('span').textContent;if(text===item.a)label.classList.add('correct');if(chosen&&label.contains(chosen)&&text!==item.a)label.classList.add('wrong')});if(chosen&&item.choices[Number(chosen.value)]===item.a)score++;card.querySelector('.explain').classList.add('show');card.querySelectorAll('input').forEach(x=>x.disabled=true)});finished=true;const pct=Math.round(score/quizData.length*100);let grade=pct>=90?5:pct>=75?4:pct>=60?3:pct>=50?2:1;const msg=grade===5?'Odlično znanje!':grade===4?'Vrlo dobro!':grade===3?'Dobro, ponovi netočne odgovore.':grade===2?'Dovoljan rezultat, potrebno je još ponavljanja.':'Ponovi gradivo uz kartice pa pokušaj ponovno.';result.innerHTML=`<div class="grade">${grade}</div><h2>Ocjena ${grade}</h2><p>Točno: <strong>${score} / ${quizData.length}</strong> (${pct}%)</p><p>${msg}</p><div class="grade-scale"><span>5: 90–100%</span><span>4: 75–89%</span><span>3: 60–74%</span><span>2: 50–59%</span><span>1: 0–49%</span></div>`;result.classList.remove('hidden');result.scrollIntoView({behavior:'smooth',block:'center'})}
+document.getElementById('finishBtn').addEventListener('click',finishQuiz);document.getElementById('newTestBtn').addEventListener('click',buildQuiz);
+const testPanel=document.getElementById('testPanel'),flashPanel=document.getElementById('flashPanel'),testTab=document.getElementById('testTab'),flashTab=document.getElementById('flashTab');
+function showPanel(which){const t=which==='test';testPanel.classList.toggle('active',t);flashPanel.classList.toggle('active',!t);testTab.classList.toggle('light',!t);flashTab.classList.toggle('light',t);window.scrollTo({top:0,behavior:'smooth'})}testTab.addEventListener('click',()=>showPanel('test'));flashTab.addEventListener('click',()=>showPanel('flash'));
+let cards=shuffle(data),cardIndex=0,showAnswer=false;const flashCard=document.getElementById('flashCard'),flashText=document.getElementById('flashText'),flashTag=document.getElementById('flashTag');
+function renderCard(){const c=cards[cardIndex];document.getElementById('flashCounter').textContent=`Kartica ${cardIndex+1} od ${cards.length}`;flashTag.textContent=showAnswer?'ODGOVOR':'PITANJE';flashText.textContent=showAnswer?c.a:c.q;flashCard.classList.toggle('answer-side',showAnswer)}
+function flip(){showAnswer=!showAnswer;renderCard()}function move(d){cardIndex=(cardIndex+d+cards.length)%cards.length;showAnswer=false;renderCard()}
+flashCard.addEventListener('click',flip);flashCard.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();flip()}});document.getElementById('flipBtn').addEventListener('click',flip);document.getElementById('prevBtn').addEventListener('click',()=>move(-1));document.getElementById('nextBtn').addEventListener('click',()=>move(1));document.getElementById('shuffleCardsBtn').addEventListener('click',()=>{cards=shuffle(cards);cardIndex=0;showAnswer=false;renderCard()});
+buildQuiz();renderCard();
+</script>
+</body>
+</html>
