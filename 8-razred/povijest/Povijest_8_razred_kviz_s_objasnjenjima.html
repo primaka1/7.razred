@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test iz povijesti za 8. razred</title>
+<style>
+:root{--blue:#173f70;--light:#f2f5f9;--green:#167548;--greenbg:#eaf8f0;--red:#b42318;--redbg:#fff0ef;--gold:#f5b700}
+*{box-sizing:border-box}
+body{font-family:Arial,Helvetica,sans-serif;margin:0;background:var(--light);color:#1e293b;line-height:1.5}
+.container{max-width:920px;margin:auto;padding:24px}
+header{background:linear-gradient(135deg,#173f70,#2867a8);color:#fff;padding:26px;border-radius:16px;margin-bottom:20px}
+h1{margin:0 0 8px;font-size:clamp(1.7rem,4vw,2.4rem)}
+.info{margin:0;opacity:.95}
+#summary{display:none;background:#fff;border:3px solid var(--blue);padding:20px;border-radius:14px;margin:18px 0;position:sticky;top:8px;z-index:5;box-shadow:0 5px 20px #0002}
+.question{background:#fff;padding:20px;margin:16px 0;border-radius:12px;border:2px solid transparent;box-shadow:0 2px 9px #00000012}
+.question.correct{border-color:var(--green)}.question.incorrect{border-color:var(--red)}
+.qtitle{font-weight:700;font-size:1.08rem;margin:0 0 12px}
+.option{display:block;padding:10px 12px;margin:7px 0;border:1px solid #d6dde7;border-radius:8px;cursor:pointer}
+.option:hover{background:#f6f9fc}input{margin-right:9px;transform:scale(1.15)}
+.feedback{display:none;margin-top:14px;padding:13px;border-radius:9px}
+.feedback.ok{display:block;background:var(--greenbg);border-left:5px solid var(--green)}
+.feedback.bad{display:block;background:var(--redbg);border-left:5px solid var(--red)}
+.correct-answer{font-weight:700}.explanation{margin-top:5px}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin:24px 0}
+button{border:0;color:#fff;padding:13px 20px;border-radius:9px;font-size:1rem;font-weight:700;cursor:pointer}
+#submit{background:var(--blue)}#reset{background:#64748b;display:none}
+button:hover{filter:brightness(1.08)}
+.unanswered{outline:3px solid var(--gold)}
+@media print{.actions{display:none}#summary{position:static}body{background:#fff}.question{break-inside:avoid;box-shadow:none}}
+</style>
+</head>
+<body><main class="container">
+<header><h1>Test iz povijesti za 8. razred</h1><p class="info">Hrvatska u Kraljevini SHS i djelovanje Stjepana Radića</p></header>
+<div id="summary" role="status"></div>
+<form id="quiz"></form>
+<div class="actions"><button id="submit" type="button">Provjeri i predaj test</button><button id="reset" type="button">Riješi ponovno</button></div>
+</main>
+<script>
+const questions=[{"q": "Kada je osnovana Hrvatska pučka seljačka stranka (HPSS)?", "options": ["1904.", "1918.", "1920."], "correct": 0, "explanation": "HPSS su 1904. godine osnovala braća Antun i Stjepan Radić."}, {"q": "Tko su bili osnivači HPSS-a?", "options": ["Antun i Stjepan Radić", "Nikola Pašić i Svetozar Pribićević", "Vladko Maček i Stjepan Radić"], "correct": 0, "explanation": "Hrvatsku pučku seljačku stranku osnovala su braća Antun i Stjepan Radić."}, {"q": "Za što se Stjepan Radić zalagao 1918. i 1920. godine?", "options": ["Za federativnu republiku", "Za apsolutnu monarhiju", "Za centralističku diktaturu"], "correct": 0, "explanation": "Radić se protivio centralizmu i zalagao se za federativno i republikansko uređenje države."}, {"q": "Što znači hegemonija?", "options": ["Prevlast jedne države ili nacije nad drugima", "Potpuna ravnopravnost svih naroda", "Dobrovoljan savez ravnopravnih država"], "correct": 0, "explanation": "Hegemonija znači prevlast neke države ili nacije nad drugim državama ili nacijama."}, {"q": "Koja se stranka na izborima 1920. zalagala za stvaranje federativne republike?", "options": ["Hrvatska pučka seljačka stranka", "Narodna radikalna stranka", "Demokratska stranka"], "correct": 0, "explanation": "HPSS Stjepana Radića zalagao se za federativnu republiku, umjesto centralističke monarhije."}, {"q": "Kada je donesen Vidovdanski ustav?", "options": ["28. lipnja 1919.", "28. lipnja 1921.", "20. lipnja 1928."], "correct": 1, "explanation": "Vidovdanski ustav donesen je 28. lipnja 1921. godine."}, {"q": "Koja je bila jedna od posljedica Vidovdanskog ustava za Hrvatsku?", "options": ["Ukinut je Hrvatski sabor", "Hrvatska je postala samostalna republika", "Hrvatska je dobila pravo veta"], "correct": 0, "explanation": "Vidovdanskim ustavom država je uređena kao centralistička monarhija, Hrvatska je izgubila posebnost, a Hrvatski sabor bio je ukinut."}, {"q": "Što znači unitarizam?", "options": ["Brisanje nacionalnih i kulturnih posebnosti te stvaranje jedne jugoslavenske nacije", "Podjela države na ravnopravne republike", "Uvođenje socijalističkog društva"], "correct": 0, "explanation": "Unitarizam je težnja brisanju nacionalnih i kulturnih posebnosti radi stvaranja jedne jugoslavenske nacije."}, {"q": "Kada je osnovana Seljačko-demokratska koalicija (SDK)?", "options": ["1927.", "1925.", "1928."], "correct": 0, "explanation": "SDK je osnovana 1927. suradnjom HSS-a i Samostalne demokratske stranke Svetozara Pribićevića."}, {"q": "Koji je bio cilj Seljačko-demokratske koalicije?", "options": ["Ravnopravnost svih naroda", "Uvođenje apsolutne monarhije", "Pripajanje Hrvatske Italiji"], "correct": 0, "explanation": "HSS i Samostalna demokratska stranka surađivali su u SDK-u radi ravnopravnosti svih naroda."}, {"q": "Tko je izvršio atentat na hrvatske zastupnike u Narodnoj skupštini?", "options": ["Nikola Pašić", "Puniša Račić", "Svetozar Pribićević"], "correct": 1, "explanation": "Atentat je izvršio Puniša Račić, zastupnik Narodne radikalne stranke."}, {"q": "Kada i gdje se dogodio atentat na hrvatske zastupnike?", "options": ["20. lipnja 1928. u Narodnoj skupštini u Beogradu", "8. kolovoza 1928. u Zagrebu", "28. lipnja 1921. u Beogradu"], "correct": 0, "explanation": "Atentat se dogodio 20. lipnja 1928. u Narodnoj skupštini u Beogradu."}, {"q": "Koji su zastupnici poginuli u atentatu?", "options": ["Pavle Radić i Đuro Basariček", "Ivan Pernar i Ivan Granđa", "Stjepan Radić i Vladko Maček"], "correct": 0, "explanation": "Pavle Radić i Đuro Basariček poginuli su u atentatu, dok su Stjepan Radić, Ivan Pernar i Ivan Granđa bili ranjeni."}, {"q": "Kada je Stjepan Radić umro od posljedica ranjavanja?", "options": ["20. lipnja 1928.", "8. kolovoza 1928.", "6. siječnja 1929."], "correct": 1, "explanation": "Stjepan Radić umro je 8. kolovoza 1928. od posljedica ranjavanja u atentatu."}, {"q": "Tko je nakon smrti Stjepana Radića preuzeo vodstvo HSS-a?", "options": ["Svetozar Pribićević", "Vladko Maček", "Ivan Pernar"], "correct": 1, "explanation": "Nakon smrti Stjepana Radića vodstvo Hrvatske seljačke stranke preuzeo je Vladko Maček."}, {"q": "Što je Italija dobila Rapalskim ugovorom 1920. godine?", "options": ["Trst i okolicu, Istru, Zadar te otoke Cres, Lošinj, Lastovo, Palagružu i Sušac", "Samo Rijeku", "Zagreb i okolicu"], "correct": 0, "explanation": "Rapalskim ugovorom Italiji su pripali Trst i okolica, Istra, Zadar te otoci Cres, Lošinj, Lastovo, Palagruža i Sušac. Rijeka je proglašena slobodnim gradom."}, {"q": "Što je Italija dobila Rimskim sporazumom 1924. godine?", "options": ["Rijeku", "Zadar", "Zagreb"], "correct": 0, "explanation": "Rimskim sporazumom iz 1924. godine Italija je dobila Rijeku, odnosno Fiume."}, {"q": "Tko je od navedenih političara bio povezan s Narodnom radikalnom strankom?", "options": ["Nikola Pašić", "Stjepan Radić", "Josip Broz Tito"], "correct": 0, "explanation": "Istaknuti političar Narodne radikalne stranke bio je Nikola Pašić."}];
+const quiz=document.getElementById('quiz');
+questions.forEach((item,i)=>{
+ const box=document.createElement('section'); box.className='question'; box.id='question-'+i;
+ let opts=item.options.map((o,j)=>`<label class="option"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+ box.innerHTML=`<p class="qtitle">${i+1}. ${item.q}</p>${opts}<div class="feedback" id="feedback-${i}"></div>`;
+ quiz.appendChild(box);
+});
+
+document.getElementById('submit').addEventListener('click',()=>{
+ let score=0, unanswered=0;
+ questions.forEach((item,i)=>{
+  const box=document.getElementById('question-'+i), fb=document.getElementById('feedback-'+i);
+  const selected=document.querySelector(`input[name="q${i}"]:checked`);
+  box.classList.remove('correct','incorrect','unanswered');
+  if(!selected){
+   unanswered++; box.classList.add('incorrect','unanswered'); fb.className='feedback bad';
+   fb.innerHTML=`<strong>⚠ Nije odgovoreno.</strong><div class="correct-answer">Točan odgovor: ${item.options[item.correct]}</div><div class="explanation">Objašnjenje: ${item.explanation}</div>`;
+  } else if(Number(selected.value)===item.correct){
+   score++; box.classList.add('correct'); fb.className='feedback ok';
+   fb.innerHTML=`<strong>✓ Točno!</strong><div class="correct-answer">Točan odgovor: ${item.options[item.correct]}</div><div class="explanation">Objašnjenje: ${item.explanation}</div>`;
+  } else {
+   box.classList.add('incorrect'); fb.className='feedback bad';
+   fb.innerHTML=`<strong>✗ Netočno.</strong><div>Tvoj odgovor: ${item.options[Number(selected.value)]}</div><div class="correct-answer">Točan odgovor: ${item.options[item.correct]}</div><div class="explanation">Objašnjenje: ${item.explanation}</div>`;
+  }
+  box.querySelectorAll('input').forEach(x=>x.disabled=true);
+ });
+ const pct=Math.round(score/questions.length*100);
+ let grade=pct>=90?'Odličan (5)':pct>=75?'Vrlo dobar (4)':pct>=60?'Dobar (3)':pct>=50?'Dovoljan (2)':'Nedovoljan (1)';
+ const summary=document.getElementById('summary'); summary.style.display='block';
+ summary.innerHTML=`<strong>Rezultat: ${score}/${questions.length} bodova (${pct}%)</strong><br>Ocjena: ${grade}${unanswered?`<br>Neodgovorena pitanja: ${unanswered}`:''}<br><small>Ispod svakog pitanja prikazani su točan odgovor i objašnjenje.</small>`;
+ document.getElementById('submit').style.display='none'; document.getElementById('reset').style.display='inline-block';
+ window.scrollTo({top:0,behavior:'smooth'});
+});
+
+document.getElementById('reset').addEventListener('click',()=>{
+ document.getElementById('quiz').reset(); document.getElementById('summary').style.display='none';
+ document.querySelectorAll('.question').forEach(box=>{box.classList.remove('correct','incorrect','unanswered'); box.querySelectorAll('input').forEach(x=>x.disabled=false);});
+ document.querySelectorAll('.feedback').forEach(f=>{f.className='feedback';f.innerHTML='';});
+ document.getElementById('submit').style.display='inline-block'; document.getElementById('reset').style.display='none'; window.scrollTo({top:0,behavior:'smooth'});
+});
+</script></body></html>
